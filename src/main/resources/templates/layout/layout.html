@@ -23,10 +23,10 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="#">Mis Archivos</a>
                         </li>
-                        <li class="nav-item" sec:authorize="hasRole('ROLE_MOD')">
+                        <li class="nav-item" sec:authorize="hasRole('ROLE_SUPERVISOR')">
                             <a class="nav-link active" href="#">Administrar grupos</a>
                         </li>
-                        <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <li class="nav-item" sec:authorize="hasRole('ROLE_ADMINISTRADOR')">
                             <a class="nav-link active" href="#">Configuracion</a>
                         </li>
                     </ul>
@@ -37,7 +37,7 @@
                                 <span sec:authentication="name"></span>
                             </button>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <span class="dropdown-item">Mi cuenta</span>
+                                <a class="dropdown-item" th:href="@{/usuario/infoUsuario}" th:text="'Mi Cuenta'"></a>
                                 <form method="POST" th:action="@{/logout}" id="logoutForm">
                                     <button class="dropdown-item"
                                         onclick="document.getElementById('logoutForm').submit();" type="submit">Cerrar

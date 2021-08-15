@@ -10,7 +10,6 @@ import com.ghb.springboot.cloud.app.entity.Usuario;
 import com.ghb.springboot.cloud.app.service.IUsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,12 +28,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AdminController {
     
     private IUsuarioService usuarioService;
-    private PasswordEncoder passwordEncoder;
 
     @Autowired    
-    public AdminController(IUsuarioService usuarioService, PasswordEncoder passwordEncoder) {
+    public AdminController(IUsuarioService usuarioService) {
         this.usuarioService = usuarioService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/crearUsuario")
@@ -53,33 +50,23 @@ public class AdminController {
     {
         String titulo = (usuario.getId() != null) ? "Editar Usuario" : "Crear Usuario";
         String boton = (usuario.getId() != null) ? "Editar" : "Crear";
-
-        System.out.println(usuario);
-        
-        if(result.hasErrors())
-        {
-            model.addAttribute("titulo", titulo);
-            model.addAttribute("boton", boton);
-            model.addAttribute("usuario", usuario);
-            return "administrador/crearUsuario";
-        }
-
         String mensajeFlash = (usuario.getId() != null) ? "Cliente editado con éxito!!!" : "Cliente creado con éxito!!!";
         
         if(usuario.getId() == null)
         {
-            usuarioService.crearUsuario(new Usuario(
-            usuario.getNombre(),
-            usuario.getApellidoPat(),
-            usuario.getApellidoMat(),
-            usuario.getUsername(),
-            passwordEncoder.encode(usuario.getPassword()),
-            usuario.getRol(),
-            usuario.getEnabled(),
-            usuario.getFechaCreacion()));
+            if(result.hasErrors())
+            {
+            model.addAttribute("titulo", titulo);
+            model.addAttribute("boton", boton);
+            model.addAttribute("usuario", usuario);
+            return "administrador/crearUsuario";
+            }
+            
+            usuarioService.crearUsuario(usuario);
         }
         else
         {
+            
             usuarioService.editarUsuario(
                 usuario.getId() , 
                 usuario.getNombre(), 
@@ -89,7 +76,6 @@ public class AdminController {
                 usuario.getEnabled(), 
                 "ROLE_"+usuario.getRol());
         }
-        
         
         status.setComplete();
         flash.addFlashAttribute("success", mensajeFlash);

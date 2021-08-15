@@ -26,6 +26,7 @@ public class UsuarioServiceImpl implements IUsuarioService{
     @Transactional
     @Override
     public void crearUsuario(Usuario usuario) {
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         usuarioRepository.save(usuario);
     }
 
@@ -57,7 +58,8 @@ public class UsuarioServiceImpl implements IUsuarioService{
         usuario.setNombre(nombre);
         usuario.setApellidoPat(apep);
         usuario.setApellidoMat(apem);
-        usuario.setPassword(passwordEncoder.encode(password));
+        if(password!="")
+            usuario.setPassword(passwordEncoder.encode(password));
         usuario.setEnabled(estado);
         usuario.setRol(rol);
 
@@ -68,6 +70,12 @@ public class UsuarioServiceImpl implements IUsuarioService{
     @Override
     public Usuario findOne(Long id) {
         return usuarioRepository.findById(id).orElse(null);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Usuario findByUsername(String username) {
+        return usuarioRepository.findByUsername(username);
     }
 
     

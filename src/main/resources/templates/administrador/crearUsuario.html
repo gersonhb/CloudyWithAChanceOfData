@@ -39,7 +39,8 @@
                     <div class="form-group row">
                         <label for="username" class="col-sm-2 col-form-label">Nombre de Usuario</label>
                         <div>
-                            <input type="text" id="username" th:field="*{username}">
+                            <input th:if="${usuario.id!=null}" type="text" id="username" th:field="*{username}" disabled>
+                            <input th:if="${usuario.id==null}"type="text" id="username" th:field="*{username}">
                         </div>
                         <div><small th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
                                 class="field-validation-valid text-danger"></small></div>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/layout :: head"></head>
+
+<body>
+    <header th:replace="layout/layout :: header"></header>
+    <div class="container py-4">
+        <div class="card bg-light">
+            <div class="card-header" th:text="${titulo}"></div>
+            <div class="card-body">
+                <table class="table table-striped table-bordered table-hover">
+                    <tbody th:object="${usuario}">
+                        <tr>
+                            <td class="col-1"><b>Nombre:</b></td>
+                            <td class="col-2" th:text="*{nombre}"></td>
+                        </tr>
+                        <tr>
+                            <td class="col-1"><b>Apellido Paterno:</b></td>
+                            <td class="col-2" th:text="*{apellidoPat}"></td>
+                        </tr>
+                        <tr>
+                            <td class="col-1"><b>Apellido Materno:</b></td>
+                            <td class="col-2" th:text="*{apellidoMat}"></td>
+                        </tr>
+                        <tr>
+                            <td class="col-1"><b>Usuario:</b></td>
+                            <td class="col-2" th:text="*{username}"></td>
+                        </tr>
+                        <tr>
+                            <td class="col-1"><b>Rol:</b></td>
+                            <td class="col-2" th:text="*{#strings.substring(rol,5)}"></td>
+                        </tr>
+                        <tr>
+                            <form method="POST" th:action="@{/usuario/infoUsuario}">
+                                <td class="col-1"><b>Contraseña:</b></td>
+                                <td class="col-2"><input type="password" name="password" placeholder="Contraseña"
+                                        style="width: 150px;">
+                                    <button type="submit" class="btn btn-success">Cambiar</button>
+                                </td>
+                            </form>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <footer th:replace="layout/layout :: footer"></footer>
+</body>
+
+</html>

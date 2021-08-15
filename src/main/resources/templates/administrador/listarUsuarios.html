@@ -10,8 +10,8 @@
             <div class="card-header" th:text="${titulo}"></div>
             <div class="card-body">
                 <div>
-                    <table class="table">
-                        <thead>
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead class="table-dark">
                             <tr>
                                 <th>ID</th>
                                 <th>Nombre</th>
@@ -32,7 +32,7 @@
                                 <td th:text="${usuario.apellidoPat}"></td>
                                 <td th:text="${usuario.apellidoMat}"></td>
                                 <td th:text="${usuario.username}"></td>
-                                <td th:text="${usuario.rol}"></td>
+                                <td th:text="${#strings.substring(usuario.rol,5)}"></td>
                                 <td th:text="${usuario.enabled}"></td>
                                 <td th:text="${usuario.fechaCreacion}"></td>
                             </tr>
