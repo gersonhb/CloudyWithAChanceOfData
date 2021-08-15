@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/layout :: head"></head>
+
+<body>
+    <header th:replace="layout/layout :: header"></header>
+    <div class="container py-4">
+        <div class="card bg-light">
+            <div class="card-header" th:text="${titulo}"></div>
+            <div class="card-body">
+                <div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Apellido Paterno</th>
+                                <th>Apellido Materno</th>
+                                <th>Usuario</th>
+                                <th>Rol</th>
+                                <th>Habilitado</th>
+                                <th>Fecha Creacion</th>
+                            </tr>
+                        </thead>
+                        <tbody th:each="usuario : ${usuarios}">
+                            <tr>
+                                <td>
+                                    <a th:href="@{/administrador/crearUsuario/} + ${usuario.id}" th:text="${usuario.id}" class="btn btn-primary btn-xs"></a>
+                                </td>
+                                <td th:text="${usuario.nombre}"></td>
+                                <td th:text="${usuario.apellidoPat}"></td>
+                                <td th:text="${usuario.apellidoMat}"></td>
+                                <td th:text="${usuario.username}"></td>
+                                <td th:text="${usuario.rol}"></td>
+                                <td th:text="${usuario.enabled}"></td>
+                                <td th:text="${usuario.fechaCreacion}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

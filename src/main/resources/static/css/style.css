@@ -1,0 +1,44 @@
+footer{
+	background-color: rgb(34, 34, 34);
+	height: 10vh;
+	color:#fff;
+	padding: 0;
+	text-align: center;
+	position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    background-image: none;
+    background-repeat: repeat;
+    background-attachment: scroll;
+    background-position: 0% 0%;
+    position: fixed;
+    left: 0pt;
+}
+
+h5.footer {
+	font-size: small;
+}
+
+.card-footer{
+	background: linear-gradient(217deg, rgb(20, 20, 20),rgb(44, 44, 44),rgb(20, 20, 20));
+}
+
+.td_col,.th_col{
+	text-align: center;
+}
+
+.btn-sm{
+	width: 30px;
+	height: 30px;
+	text-align: center;
+}
+
+.ruta{
+	height: 30px;
+	font-size: 20px;
+	padding-left: 12px;
+	padding-top: 5px;
+	font-weight: bold;
+}

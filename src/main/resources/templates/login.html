@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/layout :: head"></head>
+
+<body>
+  <div class="main">
+    <div class="alert alert-danger" th:if="${error!=null}" th:text="${error}"></div>
+    <div class="container__login">
+      <div class="middle">
+        <div id="login">
+          <form th:action="@{/login}" method="POST">
+            <p><input type="text" name="username" id="username" placeholder="Nombre de usuario" autofocus></p>
+            <p><input type="password" name="password" id="password" placeholder="Contraseña"></p>
+            <div>
+              <span style="width:50%; text-align:center; display: inline-block;">
+                <input type="submit" value="Ingresar">
+              </span>
+            </div>
+          </form>
+        </div>
+        <div class="logo">LOGO
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
