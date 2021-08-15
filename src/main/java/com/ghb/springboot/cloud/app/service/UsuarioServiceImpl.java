@@ -41,23 +41,23 @@ public class UsuarioServiceImpl implements IUsuarioService{
     @Transactional
     @Override
     public void cambiarPassword(String username, String password) {
-        Usuario usuario=usuarioRepository.findByUsername(username);
-        usuario.setPassword(passwordEncoder.encode(password));
         
-        usuarioRepository.save(usuario);
+        if(password!="")
+        {
+            Usuario usuario=usuarioRepository.findByUsername(username);
+            usuario.setPassword(passwordEncoder.encode(password));
+            usuarioRepository.save(usuario);
+        }
     }
 
     @Transactional
     @Override
-    public void editarUsuario(Long id, String nombre,String password, String apep, String apem, Boolean estado,String rol) {
+    public void editarUsuario(Long id,String password, Boolean estado,String rol) {
         Usuario usuario=usuarioRepository.findById(id).orElse(null);
 
         if(usuario==null)
             throw new UsernameNotFoundException("No se encontró el usuario con ID "+id);
         
-        usuario.setNombre(nombre);
-        usuario.setApellidoPat(apep);
-        usuario.setApellidoMat(apem);
         if(password!="")
             usuario.setPassword(passwordEncoder.encode(password));
         usuario.setEnabled(estado);

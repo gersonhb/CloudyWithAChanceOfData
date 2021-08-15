@@ -68,11 +68,8 @@ public class AdminController {
         {
             
             usuarioService.editarUsuario(
-                usuario.getId() , 
-                usuario.getNombre(), 
-                usuario.getPassword(), 
-                usuario.getApellidoPat(), 
-                usuario.getApellidoMat(), 
+                usuario.getId() ,  
+                usuario.getPassword(),  
                 usuario.getEnabled(), 
                 "ROLE_"+usuario.getRol());
         }
@@ -114,6 +111,13 @@ public class AdminController {
         return "administrador/crearUsuario";
     }
 
+    @GetMapping("/configuracion")
+    public String vistaConfiguracion(Model model)
+    {
+        model.addAttribute("titulo", "Página de configuración");
+
+        return "administrador/configuracion";
+    }
 
     @ModelAttribute("usuarios")
     public List<Usuario> listarUsuarios()

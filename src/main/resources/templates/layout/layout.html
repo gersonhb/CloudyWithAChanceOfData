@@ -27,7 +27,7 @@
                             <a class="nav-link active" href="#">Administrar grupos</a>
                         </li>
                         <li class="nav-item" sec:authorize="hasRole('ROLE_ADMINISTRADOR')">
-                            <a class="nav-link active" href="#">Configuracion</a>
+                            <a class="nav-link active" th:href="@{/administrador/configuracion}">Configuracion</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav ms-auto">
@@ -37,7 +37,9 @@
                                 <span sec:authentication="name"></span>
                             </button>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" th:href="@{/usuario/infoUsuario}" th:text="'Mi Cuenta'"></a>
+                                <a class="dropdown-item" th:href="@{/usuario/infoUsuario}">
+                                Mi Cuenta
+                                </a>
                                 <form method="POST" th:action="@{/logout}" id="logoutForm">
                                     <button class="dropdown-item"
                                         onclick="document.getElementById('logoutForm').submit();" type="submit">Cerrar

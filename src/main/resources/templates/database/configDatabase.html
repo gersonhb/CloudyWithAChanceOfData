@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/layout :: head"></head>
+
+<body>
+    <header th:replace="layout/layout :: header"></header>
+    <div class="container py-4">
+        <div class="card bg-light">
+            <div class="card-header">
+                <h3 th:text="${titulo}"></h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-bordered table-hover">
+                    <tbody th:object="${usuario}">
+                        <tr>
+                            <td class="col-1"><b>Nombre de base de datos</b></td>
+                            <td class="col-2">
+                                <input type="text" disabled th:value="${nameDatabase}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-1"><b>Tamaño de base de datos</b></td>
+                            <td class="col-2">
+                                <input type="text" disabled th:value="${sizeDatabase}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-1"><b>Backup de base de datos</b></td>
+                            <td class="col-2">
+                                <a th:href="@{/administrador/database/backup}" class="btn btn-primary"
+                                    download="backup.zip">Descargar</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <form >
+                                <td class="col-1"><b>Restaurar base de datos</b></td>
+                                <td class="col-2">
+                                    <input type="file" class="form-control-file">
+                                    <input type="submit" class="btn btn-primary" value="Restaurar">
+                                </td>
+                            </form>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <footer th:replace="layout/layout :: footer"></footer>
+</body>
+
+</html>

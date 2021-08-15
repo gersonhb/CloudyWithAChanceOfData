@@ -9,7 +9,7 @@ public interface IUsuarioService {
     public void crearUsuario(Usuario usuario);
     public List<Usuario> listarUsuarios();
     public void cambiarPassword(String username, String pass);
-    public void editarUsuario(Long id,String nombre,String password,String apep,String apem, Boolean estado,String rol);
+    public void editarUsuario(Long id,String password, Boolean estado,String rol);
     public Usuario findOne(Long id);
     public Usuario findByUsername(String username);
 }

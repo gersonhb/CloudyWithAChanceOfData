@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/layout :: head"></head>
+
+<body>
+    <header th:replace="layout/layout :: header"></header>
+    <div class="container py-4">
+        <div class="card bg-light">
+            <div class="card-header">
+                <h3 th:text="${titulo}"></h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-bordered table-hover">
+                    <tbody th:object="${usuario}">
+                        <tr>
+                            <td class="col-1"><b>Ver lista de usuario</b></td>
+                            <td class="col-2">
+                                <a th:href="@{/administrador/listarUsuarios}" class="btn btn-primary">Ver usuarios</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-1"><b>Crear nuevo usuario</b></td>
+                            <td class="col-2">
+                                <a th:href="@{/administrador/crearUsuario}" class="btn btn-primary">Crear Usuario</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-1"><b>Configuración Global</b></td>
+                            <td class="col-2">
+                                <a href="#" class="btn btn-primary">Ver configuración</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-1"><b>Herramientas de Base de Datos</b></td>
+                            <td class="col-2">
+                                <a th:href="@{/administrador/database/}" class="btn btn-primary">Ver configuración</a>
+                            </td>
+                        </tr>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <footer th:replace="layout/layout :: footer"></footer>
+</body>
+
+</html>

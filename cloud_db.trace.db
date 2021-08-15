@@ -311,3 +311,25 @@ Wrong user name or password [28000-200]
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:461)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
 	... 93 more
+2021-08-15 17:32:16 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "SELECT * FROM INFORMATION_SCHEMA.SETTINGS
+SHOW TABLES[*]"
+Syntax error in SQL statement "SELECT * FROM INFORMATION_SCHEMA.SETTINGS
+SHOW TABLES[*]"; SQL statement:
+SELECT * FROM INFORMATION_SCHEMA.SETTINGS
+SHOW TABLES [42000-200]
+2021-08-15 17:32:18 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "SELECT * FROM INFORMATION_SCHEMA.SETTINGS
+SHOW TABLES[*]"
+Syntax error in SQL statement "SELECT * FROM INFORMATION_SCHEMA.SETTINGS
+SHOW TABLES[*]"; SQL statement:
+SELECT * FROM INFORMATION_SCHEMA.SETTINGS
+SHOW TABLES [42000-200]
+2021-08-15 17:39:01 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "INFORMATION_SCHEMA" no encontrada
+Table "INFORMATION_SCHEMA" not found; SQL statement:
+SELECT * FROM INFORMATION_SCHEMA [42102-200]
+2021-08-15 17:39:27 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "INFORMATION_SCHEMA" no encontrada
+Table "INFORMATION_SCHEMA" not found; SQL statement:
+SELECT * FROM INFORMATION_SCHEMA [42102-200]
