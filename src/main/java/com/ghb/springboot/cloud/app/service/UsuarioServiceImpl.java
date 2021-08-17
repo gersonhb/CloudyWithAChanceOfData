@@ -1,5 +1,6 @@
 package com.ghb.springboot.cloud.app.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.ghb.springboot.cloud.app.entity.Usuario;
@@ -76,6 +77,29 @@ public class UsuarioServiceImpl implements IUsuarioService{
     @Override
     public Usuario findByUsername(String username) {
         return usuarioRepository.findByUsername(username);
+    }
+
+    @Transactional
+    @Override
+    public void initUsuario() {
+        Usuario usuario=usuarioRepository.findByUsername("admin");
+
+        if(usuario==null)
+        {
+            usuarioRepository.save(
+                new Usuario(
+                    "ADMINISTRADOR",
+                    "ADMINISTRADOR",
+                    "ADMINISTRADOR",
+                    "admin",
+                    passwordEncoder.encode("admin"),
+                    "ADMINISTRADOR",
+                    true,
+                    LocalDate.now()
+                )
+            );
+        }
+        
     }
 
     

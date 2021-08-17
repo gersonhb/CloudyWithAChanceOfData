@@ -12,4 +12,5 @@ public interface IUsuarioService {
     public void editarUsuario(Long id,String password, Boolean estado,String rol);
     public Usuario findOne(Long id);
     public Usuario findByUsername(String username);
+    public void initUsuario();
 }
