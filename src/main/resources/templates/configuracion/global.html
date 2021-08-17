@@ -30,7 +30,7 @@
                                 <td class="col-1"><b>Root</b></td>
                                 <td class="col-2">
                                     <input type="text" placeholder="Ruta" style="width: 300px;"
-                                    th:value="${configuraciones[0].valor}" name="root">
+                                        th:value="${configuraciones[0].valor}" name="root">
                                     <a href="#" class="btn btn-primary">Validar ruta</a>
                                 </td>
                             </tr>
@@ -44,16 +44,18 @@
                                 <td class="col-1"><b>Archivo KEY</b></td>
                                 <td class="col-2">
                                     <input type="text" placeholder="Ruta" style="width: 300px;"
-                                    th:value="${configuraciones[1].valor}" name="key">
+                                        th:value="${configuraciones[1].valor}" name="key">
                                     <a href="#" class="btn btn-primary">Validar ruta</a>
+                                    <a th:href="@{/administrador/configuracion/global/key}" class="btn btn-primary" th:if="${configuraciones[3].valor=='0'}">Generar KEY</a>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-1"><b>Archivo IV</b></td>
                                 <td class="col-2">
                                     <input type="text" placeholder="Ruta" style="width: 300px;"
-                                    th:value="${configuraciones[2].valor}" name="iv">
+                                        th:value="${configuraciones[2].valor}" name="iv">
                                     <a href="#" class="btn btn-primary">Validar ruta</a>
+                                    <a th:href="@{/administrador/configuracion/global/iv}" class="btn btn-primary" th:if="${configuraciones[4].valor=='0'}">Generar IV</a>
                                 </td>
                             </tr>
                         </tbody>

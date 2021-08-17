@@ -8,5 +8,7 @@ public interface IConfiguracionService {
 
     public void initConfiguracion();
     public List<Configuracion> findAll();
+    public Configuracion findByParametro(String parametro);
+    public void updateConfiguracion(String parametro,String ruta);
     
 }

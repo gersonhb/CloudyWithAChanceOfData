@@ -7,5 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IConfiguracionRepository extends JpaRepository<Configuracion,Long>{
+
+    public Configuracion findByParametro(String parametro);
     
 }

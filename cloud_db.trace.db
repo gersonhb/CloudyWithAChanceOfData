@@ -333,3 +333,7 @@ SELECT * FROM INFORMATION_SCHEMA [42102-200]
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "INFORMATION_SCHEMA" no encontrada
 Table "INFORMATION_SCHEMA" not found; SQL statement:
 SELECT * FROM INFORMATION_SCHEMA [42102-200]
+2021-08-16 22:54:58 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "DELETE TABLE[*] CONFIGURACIONES"; se esperaba "identifier"
+Syntax error in SQL statement "DELETE TABLE[*] CONFIGURACIONES"; expected "identifier"; SQL statement:
+delete table CONFIGURACIONES [42001-200]
