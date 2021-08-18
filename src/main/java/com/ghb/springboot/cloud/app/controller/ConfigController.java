@@ -70,8 +70,36 @@ public class ConfigController {
     public String freeDisk()
     {
         File diskPartition = new File(System.getProperty("user.dir")); 
+        String space="";
 
-        return (diskPartition.getFreeSpace() / (1024 *1024*1024)) + " GB";
+        if(diskPartition.getFreeSpace()>=1024 && diskPartition.getFreeSpace()<1048576)
+            space=(diskPartition.getFreeSpace()/1024)+" KB";
+        else if(diskPartition.getFreeSpace()>=1048576 && diskPartition.getFreeSpace()<1073741824)
+            space=(diskPartition.getFreeSpace()/1048576)+" MB";
+        else if(diskPartition.getFreeSpace()>=1073741824)
+            space=(diskPartition.getFreeSpace()/1073741824)+" GB";
+        else
+            space=diskPartition.getFreeSpace()+" B";
+
+        return space;
+    }
+
+    @ModelAttribute("use_disk")
+    public String useDisk()
+    {
+        Long size=configuracionService.sizeDirectorio(); 
+        String space="";
+
+        if(size>=1024 && size<1048576)
+            space=(size/1024)+" KB";
+        else if(size>=1048576 && size<1073741824)
+            space=(size/1048576)+" MB";
+        else if(size>=1073741824)
+            space=(size/1073741824)+" GB";
+        else
+            space=size+" B";
+
+        return space;
     }
 
     @ModelAttribute("user_dir")

@@ -37,7 +37,7 @@
                             <tr>
                                 <td class="col-1"><b>Espacio utilizado / Espacio disponible</b></td>
                                 <td class="col-2">
-                                    <input type="text" disabled th:value="${free_disk}">
+                                    <input type="text" disabled th:value="${use_disk}+' / ' +${free_disk}">
                                 </td>
                             </tr>
                             <tr>
@@ -46,7 +46,8 @@
                                     <input type="text" placeholder="Ruta" style="width: 300px;"
                                         th:value="${configuraciones[1].valor}" name="key">
                                     <a href="#" class="btn btn-primary">Validar ruta</a>
-                                    <a th:href="@{/administrador/configuracion/global/key}" class="btn btn-primary" th:if="${configuraciones[3].valor=='0'}">Generar KEY</a>
+                                    <a th:href="@{/administrador/configuracion/global/key}" class="btn btn-primary"
+                                        th:if="${configuraciones[3].valor=='0'}">Generar KEY</a>
                                 </td>
                             </tr>
                             <tr>
@@ -55,7 +56,8 @@
                                     <input type="text" placeholder="Ruta" style="width: 300px;"
                                         th:value="${configuraciones[2].valor}" name="iv">
                                     <a href="#" class="btn btn-primary">Validar ruta</a>
-                                    <a th:href="@{/administrador/configuracion/global/iv}" class="btn btn-primary" th:if="${configuraciones[4].valor=='0'}">Generar IV</a>
+                                    <a th:href="@{/administrador/configuracion/global/iv}" class="btn btn-primary"
+                                        th:if="${configuraciones[4].valor=='0'}">Generar IV</a>
                                 </td>
                             </tr>
                         </tbody>

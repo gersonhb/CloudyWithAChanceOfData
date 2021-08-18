@@ -1,7 +1,12 @@
 package com.ghb.springboot.cloud.app.service;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.ghb.springboot.cloud.app.entity.Configuracion;
 import com.ghb.springboot.cloud.app.repository.IConfiguracionRepository;
@@ -19,9 +24,9 @@ public class ConfiguracionServiceImpl implements IConfiguracionService {
     @Transactional
     @Override
     public void initConfiguracion() {
-        Configuracion configuracion = configuracionRepository.findById(1L).orElse(null);
+        List<Configuracion> configuracion = configuracionRepository.findAll();
 
-        if (configuracion == null) {
+        if (configuracion.size()==0) {
             configuracionRepository.saveAll(List.of(
                     new Configuracion("ROOT", System.getProperty("user.dir")),
                     new Configuracion("KEY_RUTA", ""), 
@@ -37,6 +42,9 @@ public class ConfiguracionServiceImpl implements IConfiguracionService {
                     System.out.println("Error al crear directorio ROOT_CLOUD");
                 }
             }
+            else
+                updateConfiguracion("ROOT", System.getProperty("user.dir")+"/ROOT_CLOUD");
+
         }
 
     }
@@ -59,6 +67,34 @@ public class ConfiguracionServiceImpl implements IConfiguracionService {
         configuracion.setValor(ruta);
         configuracionRepository.save(configuracion);
 
+    }
+
+    @Override
+    public Long sizeDirectorio() {
+
+        Configuracion configuracion=configuracionRepository.findByParametro("ROOT");
+        Path path=Paths.get(configuracion.getValor());
+        Long size = 0L;
+
+        try (Stream<Path> walk = Files.walk(path))
+        {  
+            size = walk
+                    .filter(Files::isRegularFile)
+                    .mapToLong(p -> {
+                        try {
+                            return Files.size(p);
+                        } catch (IOException e) {
+                            System.out.println("Error al obtener tamaño de unidad");
+                            return 0L;
+                        }
+                    })
+                    .sum();
+  
+        } catch (IOException e) {
+            System.out.println("Error al obtener tamaño de unidad");
+        }
+
+        return size;
     }
 
 }

@@ -10,5 +10,6 @@ public interface IConfiguracionService {
     public List<Configuracion> findAll();
     public Configuracion findByParametro(String parametro);
     public void updateConfiguracion(String parametro,String ruta);
+    public Long sizeDirectorio();
     
 }

@@ -39,12 +39,12 @@ public class DatabaseController {
     public String sizeDatabase()
     {
         String size;
-        if(databaseTools.sizeDatabase()>=1000)
-            size=databaseTools.sizeDatabase()/1000+" KB";
-        else if(databaseTools.sizeDatabase()>=1000000)
-            size=databaseTools.sizeDatabase()/1000000+" MB";
-        else if(databaseTools.sizeDatabase()>=1000000000)
-            size=databaseTools.sizeDatabase()/1000000000+" GB";
+        if(databaseTools.sizeDatabase()>=1024 && databaseTools.sizeDatabase()<1048576)
+            size=databaseTools.sizeDatabase()/1024+" KB";
+        else if(databaseTools.sizeDatabase()>=1048576 && databaseTools.sizeDatabase()<1073741824)
+            size=databaseTools.sizeDatabase()/1048576+" MB";
+        else if(databaseTools.sizeDatabase()>=1073741824)
+            size=databaseTools.sizeDatabase()/1073741824+" GB";
         else
             return databaseTools.sizeDatabase().toString()+" B";
 

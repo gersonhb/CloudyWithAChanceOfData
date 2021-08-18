@@ -82,9 +82,9 @@ public class UsuarioServiceImpl implements IUsuarioService{
     @Transactional
     @Override
     public void initUsuario() {
-        Usuario usuario=usuarioRepository.findByUsername("admin");
+        List<Usuario> usuario=usuarioRepository.findAll();
 
-        if(usuario==null)
+        if(usuario.size()==0)
         {
             usuarioRepository.save(
                 new Usuario(

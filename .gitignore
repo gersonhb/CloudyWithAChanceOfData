@@ -35,3 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+## H2 Database ##
+cloud_db.mv.db
+cloud_db.trace.db
+ROOT_CLOUD/
