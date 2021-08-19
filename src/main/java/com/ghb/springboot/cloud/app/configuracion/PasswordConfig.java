@@ -1,4 +1,4 @@
-package com.ghb.springboot.cloud.app.security;
+package com.ghb.springboot.cloud.app.configuracion;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

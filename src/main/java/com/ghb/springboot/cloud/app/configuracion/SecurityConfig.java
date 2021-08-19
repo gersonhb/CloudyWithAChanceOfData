@@ -1,4 +1,4 @@
-package com.ghb.springboot.cloud.app.security;
+package com.ghb.springboot.cloud.app.configuracion;
 
 import com.ghb.springboot.cloud.app.entity.Rol;
 import com.ghb.springboot.cloud.app.service.CustomUserDetailsService;

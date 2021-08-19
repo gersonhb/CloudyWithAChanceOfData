@@ -9,9 +9,13 @@
         <div class="row">
             <div class="col">
                 <div class="row">
-                    <input type="submit" value="Subir archivo" class="col-2 btn btn-outline-success border">
-                    <input type="submit" value="Crear carpeta" class="col-2 btn btn-outline-success border">
+                    <form method="POST" th:action="@{/directorio/upload}" enctype="multipart/form-data">
+                        <input type="file" name="file">
+                        <input type="submit" value="Subir archivo" class="col-2 btn btn-outline-success border">
+                        <input type="submit" value="Crear carpeta" class="col-2 btn btn-outline-success border">
+                    </form>
                     <input type="text" placeholder="Buscar archivo" class="col-4 ms-auto border">
+
                 </div>
                 <div class="row my-1">
                     <input type="submit" value="<-" class="col-1 btn btn-outline-primary border btn-sm">
@@ -33,12 +37,12 @@
                                 <td class="col-1 td_col" th:text="${dir.size}"></td>
                                 <td class="col-2 td_col" th:text="${dir.fecMod}"></td>
                                 <td class="col-2 td_col" th:if="${!dir.esDirectorio}">
-                                    <input type="submit" value="¡" class="col-1 btn btn-success btn-sm">
-                                    <input type="submit" value="v" class="col-1 btn btn-primary btn-sm">
-                                    <input type="submit" value="X" class="col-1 btn btn-danger btn-sm">
+                                    <a class="col-1 btn btn-success btn-sm">¡</a>
+                                    <a th:href="@{/directorio/descarga/}+${dir.nombre}" class="col-1 btn btn-primary btn-sm" download>V</a>
+                                    <a class="col-1 btn btn-danger btn-sm">X</a>
                                 </td>
                                 <td class="col-2 td_col" th:if="${dir.esDirectorio}">
-                                    <input type="submit" value="X" class="col-1 btn btn-danger btn-sm">
+                                    <input type="submit" value="X" name="borrar" class="col-1 btn btn-danger btn-sm">
                                 </td>
                             </tr>
                         </tbody>

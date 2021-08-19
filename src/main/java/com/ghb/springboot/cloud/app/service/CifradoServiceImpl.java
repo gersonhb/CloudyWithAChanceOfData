@@ -1,5 +1,6 @@
 package com.ghb.springboot.cloud.app.service;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.security.NoSuchAlgorithmException;
@@ -134,7 +135,7 @@ public class CifradoServiceImpl implements ICifradoService {
             cipher.init(Cipher.ENCRYPT_MODE, leerKey(), leerIv());
 
             FileInputStream inputStream = new FileInputStream(ruta);
-            FileOutputStream outputStream = new FileOutputStream(ruta + ".lock");
+            FileOutputStream outputStream = new FileOutputStream(ruta+".lock");
             byte[] buffer = new byte[64];
             int bytesLeer;
             while ((bytesLeer = inputStream.read(buffer)) != -1) {
@@ -152,6 +153,11 @@ public class CifradoServiceImpl implements ICifradoService {
             inputStream.close();
             outputStream.close();
 
+            File fileLock=new File(ruta+".lock");
+            File fileOrignial=new File(ruta);
+            
+            fileLock.renameTo(fileOrignial);
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -163,8 +169,8 @@ public class CifradoServiceImpl implements ICifradoService {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, leerKey(), leerIv());
 
-            FileInputStream inputStream = new FileInputStream(ruta + ".lock");
-            FileOutputStream outputStream = new FileOutputStream(ruta);
+            FileInputStream inputStream = new FileInputStream(ruta);
+            FileOutputStream outputStream = new FileOutputStream(ruta+".unlock");
             byte[] buffer = new byte[64];
             int bytesLeer;
             while ((bytesLeer = inputStream.read(buffer)) != -1) {

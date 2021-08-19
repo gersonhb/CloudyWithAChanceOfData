@@ -37,6 +37,7 @@ public class DirectorioServiceImpl implements IDirectorioService {
         }
 
         ls=stream
+        .sorted()
         .map(n->new Archivo(
             n.toFile().getName(), 
             n.toFile().length(),
