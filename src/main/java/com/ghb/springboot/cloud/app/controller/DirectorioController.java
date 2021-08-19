@@ -2,6 +2,7 @@ package com.ghb.springboot.cloud.app.controller;
 
 import java.util.List;
 
+import com.ghb.springboot.cloud.app.entity.Archivo;
 import com.ghb.springboot.cloud.app.service.IDirectorioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class DirectorioController {
     @GetMapping({"/",""})
     public String vistaDirectorio(Model model)
     {
-        List<String> directorios=directorioService.listarDirectorio();
+        List<Archivo> directorios=directorioService.listarDirectorio();
         
         model.addAttribute("titulo", "Directorio Compartido");
         model.addAttribute("directorios", directorios);

@@ -29,12 +29,15 @@
                         </thead>
                         <tbody class="table-light">
                             <tr th:each="dir : ${directorios}">
-                                <td th:text="${dir}"></td>
-                                <td class="col-1 td_col">Test2</td>
-                                <td class="col-2 td_col">Test3</td>
-                                <td class="col-2 td_col">
+                                <td th:text="${dir.nombre}"></td>
+                                <td class="col-1 td_col" th:text="${dir.size}"></td>
+                                <td class="col-2 td_col" th:text="${dir.fecMod}"></td>
+                                <td class="col-2 td_col" th:if="${!dir.esDirectorio}">
                                     <input type="submit" value="¡" class="col-1 btn btn-success btn-sm">
                                     <input type="submit" value="v" class="col-1 btn btn-primary btn-sm">
+                                    <input type="submit" value="X" class="col-1 btn btn-danger btn-sm">
+                                </td>
+                                <td class="col-2 td_col" th:if="${dir.esDirectorio}">
                                     <input type="submit" value="X" class="col-1 btn btn-danger btn-sm">
                                 </td>
                             </tr>
