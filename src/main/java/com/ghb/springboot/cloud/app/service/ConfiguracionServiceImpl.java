@@ -32,7 +32,9 @@ public class ConfiguracionServiceImpl implements IConfiguracionService {
                     new Configuracion("KEY_RUTA", ""), 
                     new Configuracion("IV_RUTA", ""),
                     new Configuracion("KEY_FILE", "0"), 
-                    new Configuracion("IV_FILE", "0")));
+                    new Configuracion("IV_FILE", "0"),
+                    new Configuracion("BK_FILE","3")));
+
 
             File directorio = new File(System.getProperty("user.dir")+"/ROOT_CLOUD");
             if (!directorio.exists()) {

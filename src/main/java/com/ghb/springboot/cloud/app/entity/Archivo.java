@@ -1,12 +1,13 @@
 package com.ghb.springboot.cloud.app.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Archivo {
 
     private String nombre;
     private Long tamano;
-    private LocalDate fecMod;
+    private LocalDateTime fecMod;
     private Boolean esDirectorio;
 
     public String getNombre() {
@@ -25,11 +26,11 @@ public class Archivo {
         this.tamano = tamano;
     }
 
-    public LocalDate getFecMod() {
+    public LocalDateTime getFecMod() {
         return fecMod;
     }
 
-    public void setFecMod(LocalDate fecMod) {
+    public void setFecMod(LocalDateTime fecMod) {
         this.fecMod = fecMod;
     }
 
@@ -57,7 +58,12 @@ public class Archivo {
         return space;
     }
 
-    public Archivo(String nombre, Long tamano, LocalDate fecMod, Boolean esDirectorio) {
+    private String getFormatoFecha()
+    {
+        return getFecMod().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+    }
+
+    public Archivo(String nombre, Long tamano, LocalDateTime fecMod, Boolean esDirectorio) {
         this.nombre = nombre;
         this.tamano = tamano;
         this.fecMod = fecMod;

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import com.ghb.springboot.cloud.app.entity.Configuracion;
 
@@ -35,6 +36,7 @@ public class FileServiceImpl implements IFileService{
         Configuracion root=configuracionService.findByParametro("ROOT");
         Configuracion keyParam=configuracionService.findByParametro("KEY_FILE");
         Configuracion ivParam=configuracionService.findByParametro("IV_FILE");
+        Integer bkFile=Integer.parseInt(configuracionService.findByParametro("BK_FILE").getValor());
 
         if(file.isEmpty())
             return "Seleccina un archivo a subir";
@@ -45,13 +47,47 @@ public class FileServiceImpl implements IFileService{
         try {
             byte[] bytes=file.getBytes();
             
-            Path ruta=Paths.get(root.getValor()+"/"+file.getOriginalFilename());            
-            Files.write(ruta,bytes);
+            if(!new File(root.getValor()+"/"+file.getOriginalFilename()).exists())
+            {
+                Path ruta=Paths.get(root.getValor()+"/"+file.getOriginalFilename());            
+                Files.write(ruta,bytes);
 
-            cifradoService.encriptar(root.getValor()+"/"+file.getOriginalFilename());
+                cifradoService.encriptar(root.getValor()+"/"+file.getOriginalFilename());
 
-            return "El archivo "+file.getOriginalFilename()+" se ha subido exitosamente";
+                return "El archivo "+file.getOriginalFilename()+" se ha subido exitosamente";
+            }
+            else
+            {
+                String[] parts = file.getOriginalFilename().split("\\.");
+                Path source=null;
+                
+                for(int i=bkFile-2;i>=0;i--)
+                {
+                    if(i==0)
+                    {
+                        source=Paths.get(root.getValor()+"/"+file.getOriginalFilename());
+                        Files.move(source,source.resolveSibling(parts[0]+"_"+(i+1)+"."+parts[1]),
+                            StandardCopyOption.REPLACE_EXISTING);
 
+                        break;
+                    }
+                    if(new File(root.getValor()+"/"+parts[0]+"_"+i+"."+parts[1]).exists())
+                    {
+                        source=Paths.get(root.getValor()+"/"+parts[0]+"_"+i+"."+parts[1]);
+                        Files.move(source,source.resolveSibling(parts[0]+"_"+(i+1)+"."+parts[1]),
+                            StandardCopyOption.REPLACE_EXISTING);
+                    }
+                    
+
+                }
+
+                Path ruta=Paths.get(root.getValor()+"/"+file.getOriginalFilename());            
+                Files.write(ruta,bytes);
+
+                cifradoService.encriptar(root.getValor()+"/"+file.getOriginalFilename());
+
+                return "El archivo "+file.getOriginalFilename()+" se ha actualizado exitosamente";
+            }
         } catch (IOException e) {
             return "Error al subir archivo";
         }

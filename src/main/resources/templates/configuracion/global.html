@@ -60,6 +60,13 @@
                                         th:if="${configuraciones[4].valor=='0'}">Generar IV</a>
                                 </td>
                             </tr>
+                            <tr>
+                                <td class="col-1"><b>Número de backup por archivo</b></td>
+                                <td class="col-2">
+                                    <input type="number" placeholder="Numero de backup" style="width: 300px;"
+                                        th:value="${configuraciones[5].valor}" name="bkfile">
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                     <input type="submit" class="btn btn-primary" value="Guardar Cambios">

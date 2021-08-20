@@ -42,7 +42,9 @@ public class DirectorioServiceImpl implements IDirectorioService {
             n.toFile().getName(), 
             n.toFile().length(),
             Instant.ofEpochMilli(
-                (n.toFile().lastModified())).atZone(ZoneId.systemDefault()).toLocalDate(),
+                (n.toFile().lastModified()))
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime(),
             n.toFile().isDirectory()))
         .collect(Collectors.toList());
         

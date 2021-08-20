@@ -42,3 +42,7 @@ cloud_db.trace.db
 
 ## Ruta Compartida ##
 ROOT_CLOUD/
+
+## Cifrado ##
+iv
+key

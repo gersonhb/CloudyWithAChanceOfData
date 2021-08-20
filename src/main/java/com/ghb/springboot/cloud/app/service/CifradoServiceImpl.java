@@ -1,8 +1,11 @@
 package com.ghb.springboot.cloud.app.service;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
@@ -153,10 +156,10 @@ public class CifradoServiceImpl implements ICifradoService {
             inputStream.close();
             outputStream.close();
 
-            File fileLock=new File(ruta+".lock");
-            File fileOrignial=new File(ruta);
-            
-            fileLock.renameTo(fileOrignial);
+
+            Path dest=Paths.get(ruta);
+            Path source=Paths.get(ruta+".lock");
+            Files.move(source, dest,StandardCopyOption.REPLACE_EXISTING);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
