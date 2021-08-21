@@ -1,5 +1,6 @@
 package com.ghb.springboot.cloud.app.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -38,7 +39,9 @@ public class DirectorioServiceImpl implements IDirectorioService {
 
         ls=stream
         .sorted()
-        .map(n->new Archivo(
+        .filter(n->!(n.getFileName().toString().matches("^[a-zA-Z0-9._]+_\\d\\.[a-zA-Z0-9]+$")))
+        .map(n->	
+           	new Archivo(
             n.toFile().getName(), 
             n.toFile().length(),
             Instant.ofEpochMilli(
@@ -47,11 +50,40 @@ public class DirectorioServiceImpl implements IDirectorioService {
                 .toLocalDateTime(),
             n.toFile().isDirectory()))
         .collect(Collectors.toList());
-        
-        
         stream.close();
 
         return ls;
     }
+
+	@Override
+	public List<Archivo> listarBkFile(String archivo) {
+		Configuracion configuracion = configuracionService.findByParametro("ROOT");
+        List<Archivo> ls=new ArrayList<>();
+        Stream<Path> stream=null;
+        String[] parts=archivo.split("\\.");
+
+        try {
+            stream = Files.list(Paths.get(configuracion.getValor()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ls=stream
+        .sorted()
+        .filter(n->n.getFileName().toString().matches("^"+parts[0]+"_\\d\\."+parts[1]+"$"))
+        .map(n->	
+           	new Archivo(
+            n.toFile().getName(), 
+            n.toFile().length(),
+            Instant.ofEpochMilli(
+                (n.toFile().lastModified()))
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime(),
+            n.toFile().isDirectory()))
+        .collect(Collectors.toList());
+        stream.close();
+
+        return ls;
+	}
 
 }

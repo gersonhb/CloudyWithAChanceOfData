@@ -10,13 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -44,21 +42,13 @@ public class DirectorioController {
         model.addAttribute("titulo", "Directorio Compartido");
         model.addAttribute("directorios", directorios);
         
-        return "directorio";
+        return "directorio/directorio";
     }
 
     @PostMapping("/upload")
     public String subirArchivo(@RequestParam MultipartFile file,RedirectAttributes flash)
     {
         flash.addFlashAttribute("info",uploadService.subirArchivo(file));
-
-        return "redirect:/directorio";
-    }
-
-    @ExceptionHandler(MultipartException.class)
-    public String errorSubirArchivo(RedirectAttributes flash)
-    {
-        flash.addFlashAttribute("error","El tamaño del archivo supera lo permitido");
 
         return "redirect:/directorio";
     }
@@ -74,7 +64,10 @@ public class DirectorioController {
     {
         return fileService.descargasArchivo(file);        
     }
-
-
     
+    @GetMapping("/bkArchivo/{archivo}")
+    public List<Archivo> listarBkArchivos(@PathVariable String archivo)
+    {
+        return directorioService.listarBkFile(archivo);
+    }
 }
