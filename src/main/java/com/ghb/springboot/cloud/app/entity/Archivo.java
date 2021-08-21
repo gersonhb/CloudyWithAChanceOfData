@@ -58,7 +58,7 @@ public class Archivo {
         return space;
     }
 
-    private String getFormatoFecha()
+    public String getFormatoFecha()
     {
         return getFecMod().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
     }

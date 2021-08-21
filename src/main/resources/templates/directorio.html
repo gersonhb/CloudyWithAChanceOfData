@@ -10,10 +10,32 @@
             <div class="col">
                 <div class="row">
                     <form method="POST" th:action="@{/directorio/upload}" enctype="multipart/form-data">
-                        <input type="file" name="file">
-                        <input type="submit" value="Subir archivo" class="col-2 btn btn-outline-success border">
-                        <input type="submit" value="Crear carpeta" class="col-2 btn btn-outline-success border">
+                        <div>
+                            <input type="file" name="file">
+                            <input type="submit" value="Subir archivo!!!" class="col-2 btn btn-outline-success border">
+                        </div>
                     </form>
+                        <div>
+                            <input type="button" value="Crear carpeta" class="col-2 btn btn-outline-success border"
+                            data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                      ...
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                      <button type="button" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                        </div>
                     <input type="text" placeholder="Buscar archivo" class="col-4 ms-auto border">
 
                 </div>
@@ -38,7 +60,8 @@
                                 <td class="col-2 td_col" th:text="${dir.formatoFecha}"></td>
                                 <td class="col-2 td_col" th:if="${!dir.esDirectorio}">
                                     <a class="col-1 btn btn-success btn-sm">¡</a>
-                                    <a th:href="@{/directorio/descarga/}+${dir.nombre}" class="col-1 btn btn-primary btn-sm" download>V</a>
+                                    <a th:href="@{/directorio/descarga/}+${dir.nombre}"
+                                        class="col-1 btn btn-primary btn-sm" download>V</a>
                                     <a class="col-1 btn btn-danger btn-sm">X</a>
                                 </td>
                                 <td class="col-2 td_col" th:if="${dir.esDirectorio}">

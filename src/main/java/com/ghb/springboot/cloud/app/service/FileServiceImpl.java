@@ -39,7 +39,7 @@ public class FileServiceImpl implements IFileService{
         Integer bkFile=Integer.parseInt(configuracionService.findByParametro("BK_FILE").getValor());
 
         if(file.isEmpty())
-            return "Seleccina un archivo a subir";
+            return "Selecciona un archivo a subir";
 
         if(keyParam.getValor().equals("0") || ivParam.getValor().equals("0"))
             return "Para subir archivos el administrador debe generar los archivos KEY y IV.";
