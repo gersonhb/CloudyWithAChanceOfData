@@ -1,8 +1,6 @@
-$('document').ready(function(){
-	$('.table .btn').on('click', function(event){
-		
+$(document).ready(function (event) {
+	$('#info').on('click',function(event){
 		event.preventDefault();
 		$('#bkArchivo').modal();
-		
 	});
 });

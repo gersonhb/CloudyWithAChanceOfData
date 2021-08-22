@@ -1,6 +1,5 @@
 package com.ghb.springboot.cloud.app.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -86,4 +85,29 @@ public class DirectorioServiceImpl implements IDirectorioService {
         return ls;
 	}
 
+	@Override
+	public String mkdir(String directorio) {
+		
+        Configuracion configuracion=configuracionService.findByParametro("ROOT");
+        Path d=Paths.get(configuracion.getValor()+"/"+directorio);
+        
+        if(directorio.matches("^[a-zA-Z][a-zA-Z0-9.-_ ]{1,15}"))
+        {
+            if(Files.exists(d))
+            {
+                return "La carpeta "+directorio+" ya existe";
+            }
+            else
+            {
+                try {
+                    Files.createDirectory(d);
+                    return "Se creó la carpeta "+directorio;
+                } catch (IOException e) {
+                    return "Error al crear la carpeta "+directorio;
+                }
+            }
+        }
+        else
+            return "Nombre incorrecto, el nombre no puede empezar con número o caracter especial o espacio en blanco, tamaño máximo de nombre 16 caracteres";
+	}
 }

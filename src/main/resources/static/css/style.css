@@ -42,3 +42,11 @@ h5.footer {
 	padding-top: 5px;
 	font-weight: bold;
 }
+
+.carpeta:link
+{
+    display:block;
+	color: black;
+	text-decoration: none;
+	
+}

@@ -54,9 +54,12 @@ public class DirectorioController {
     }
 
     @PostMapping("/mkdir")
-    public String crearDirectorio()
+    public String mkdir(@RequestParam String directorio, RedirectAttributes flash)
     {
-        return "";
+        System.out.println("\""+directorio+"\"");
+        flash.addFlashAttribute("info", directorioService.mkdir(directorio));
+
+        return "redirect:/directorio";
     }
 
     @GetMapping("/descarga/{file}")
@@ -65,8 +68,8 @@ public class DirectorioController {
         return fileService.descargasArchivo(file);        
     }
     
-    @GetMapping("/bkArchivo/{archivo}")
-    public List<Archivo> listarBkArchivos(@PathVariable String archivo)
+    @PostMapping("/bkArchivo")
+    public List<Archivo> listarBkArchivos(@RequestParam String archivo)
     {
         return directorioService.listarBkFile(archivo);
     }

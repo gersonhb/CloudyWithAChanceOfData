@@ -8,5 +8,6 @@ public interface IDirectorioService {
 
     public List<Archivo> listarDirectorio();
     public List<Archivo> listarBkFile(String archivo);
+    public String mkdir(String directorio);
     
 }
