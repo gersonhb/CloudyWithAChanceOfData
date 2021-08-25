@@ -4,73 +4,69 @@
 <head th:replace="layout/layout :: head"></head>
 
 <body>
-	<header th:replace="layout/layout :: header"></header>
-	<div class="container my-4">
-		<div class="row">
-			<div class="col">
-				<div class="row g-3">
-					<div class="col-auto">
-						<input type="button" value="Subir archivo" class="btn btn-success border mb-3"
-							data-bs-toggle="modal" data-bs-target="#uploadModal">
-					</div>
-					<div class="col-auto">
-						<input type="button" value="Crear carpeta" class="mb-3 btn btn-success border"
-							data-bs-toggle="modal" data-bs-target="#mkdirModal">
-					</div>
-					<div class="col-6">
-						<input type="text" placeholder="Buscar archivo" class="offset-md-6 form-control">
-					</div>
-				</div>
-				<div class="row my-1">
-					<input type="submit" value="<-" class="col-1 btn btn-outline-primary border btn-sm">
-					<span class="col ruta">Ruta: </span>
-				</div>
-				<div class="row my-1">
-					<table class="table table-stiped table-hover">
-						<thead class="table-dark">
-							<tr>
-								<th>Nombre de archivo</th>
-								<th class="col-1 th_col">Tamaño</th>
-								<th class="col-2 th_col">Fecha de Modificación</th>
-								<th class="col-2 th_col">Accion</th>
-							</tr>
-						</thead>
-						<tbody class="table-light">
-							<tr th:each="dir : ${directorios}">
-								<td th:text="${dir.nombre}" th:if="${!dir.esDirectorio}"></td>
-								<td th:if="${dir.esDirectorio}">
-									<a th:href="@{/directorio/}+${dir.nombre}"  
-									class="carpeta" th:text="${dir.nombre}">
-									</a>
-								</td>
-								<td class="col-1 td_col" th:text="${dir.size}"></td>
-								<td class="col-2 td_col" th:text="${dir.formatoFecha}"></td>
-								<td class="col-2 td_col" th:if="${!dir.esDirectorio}">
-									<a th:href="@{/directorio/bkArchivo/}+${dir.nombre}"
-									class="col-1 btn btn-success btn-sm info"></a>
-									<!--<button class="col-1 btn btn-success btn-sm info" type="button"
-										data-bs-toggle="modal" data-bs-target="#bkArchivo">¡</button>
-									<!-- th:href="@{/directorio/bkArchivo/}+${dir.nombre}" -->
-
-									<a th:href="@{/directorio/descarga/}+${dir.nombre}"
-										class="col-1 btn btn-primary btn-sm" download>V</a>
-									<a class="col-1 btn btn-danger btn-sm">X</a>
-								</td>
-								<td class="col-2 td_col" th:if="${dir.esDirectorio}">
-									<input type="submit" value="X" name="borrar" class="col-1 btn btn-danger btn-sm">
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div th:replace="directorio/upload  :: upload"></div>
-	<div th:replace="directorio/crearCarpeta  :: crearCarpeta"></div>
-	<div th:replace="directorio/bkArchivo  :: bkArchivo"></div>
-	<script type="text/javascript" th:src="@{/js/bkArchivo.js}"></script>
-	<footer th:replace="layout/layout :: footer"></footer>
+    <header th:replace="layout/layout :: header"></header>
+    <div class="container my-4">
+        <div class="row">
+            <div class="col">
+                <div class="row g-3">
+                    <div class="col-auto">
+                        <input type="button" value="Subir archivo" class="btn btn-success border mb-3"
+                            data-bs-toggle="modal" data-bs-target="#uploadModal">
+                    </div>
+                    <div class="col-auto">
+                        <input type="button" value="Crear carpeta" class="mb-3 btn btn-success border"
+                            data-bs-toggle="modal" data-bs-target="#mkdirModal">
+                    </div>
+                    <div class="col-6">
+                        <input type="text" placeholder="Buscar archivo" class="offset-md-6 form-control">
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <input type="submit" value="<-" class="col-1 btn btn-outline-primary border btn-sm">
+                    <span class="col ruta">Ruta: <strong name="ruta">/</strong></span>
+                </div>
+                <div class="row my-1">
+                    <table class="table table-stiped table-hover" ref="tabla">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Nombre de archivo</th>
+                                <th class="col-1 th_col">Tamaño</th>
+                                <th class="col-2 th_col">Fecha de Modificación</th>
+                                <th class="col-2 th_col">Accion</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-light">
+                            <tr th:each="dir : ${directorios}">
+                                <td th:text="${dir.nombre}" th:if="${!dir.esDirectorio}"></td>
+                                <td th:if="${dir.esDirectorio}">
+                                    <a th:href="@{/directorio/}+${dir.nombre}" class="carpeta" th:text="${dir.nombre}">
+                                    </a>
+                                </td>
+                                <td class="col-1 td_col" th:text="${dir.size}"></td>
+                                <td class="col-2 td_col" th:text="${dir.formatoFecha}"></td>
+                                <td class="col-2 td_col" th:if="${!dir.esDirectorio}">
+                                    <button class="col-1 btn btn-success btn-sm info" type="button"
+                                        data-bs-toggle="modal" data-bs-target="#bkArchivoModal">i</button>
+                                    <input type="hidden" class="link"
+                                        th:value="'/directorio/bkArchivo/'+${dir.nombre}" />
+                                    <a th:href="@{/directorio/descarga/}+${dir.nombre}"
+                                        class="col-1 btn btn-primary btn-sm" download>V</a>
+                                    <a class="col-1 btn btn-danger btn-sm">X</a>
+                                </td>
+                                <td class="col-2 td_col" th:if="${dir.esDirectorio}">
+                                    <input type="submit" value="X" name="borrar" class="col-1 btn btn-danger btn-sm">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="directorio/upload  :: upload"></div>
+    <div th:replace="directorio/crearCarpeta  :: crearCarpeta"></div>
+    <div th:replace="directorio/bkArchivoModal  :: bkArchivo"></div>
+    <footer th:replace="layout/layout :: footer"></footer>
 </body>
 
 </html>

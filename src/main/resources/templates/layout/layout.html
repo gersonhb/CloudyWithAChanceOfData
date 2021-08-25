@@ -38,13 +38,13 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a class="dropdown-item carpeta" th:href="@{/usuario/infoUsuario}">
-                                Mi Cuenta
+                                    Mi Cuenta
                                 </a>
                                 <form method="POST" th:action="@{/logout}" id="logoutForm">
                                     <button class="dropdown-item"
                                         onclick="document.getElementById('logoutForm').submit();" type="submit">Cerrar
                                         Sesión</button>
-                                </form> 
+                                </form>
                             </div>
                         </li>
                     </ul>
@@ -63,8 +63,11 @@
         <h5 class="footer">«La FSF es una organización de ámbito mundial cuyo objetivo es promover la libertad de los
             usuarios de
             ordenadores. Defendamos los derechos de todos los usuarios de software»</h5>
+
         <script th:src="@{/js/popper.min.js}"></script>
         <script th:src="@{/js/bootstrap.min.js}"></script>
+        <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/funciones.js}"></script>
     </footer>
 </body>
 

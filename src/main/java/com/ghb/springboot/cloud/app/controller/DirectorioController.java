@@ -67,10 +67,14 @@ public class DirectorioController {
     {
         return fileService.descargasArchivo(file);        
     }
-    
-    @PostMapping("/bkArchivo")
-    public List<Archivo> listarBkArchivos(@RequestParam String archivo)
+
+    @GetMapping("/bkArchivo/{archivo}")
+    public String listarBkArchivos(@PathVariable String archivo, Model model)
     {
-        return directorioService.listarBkFile(archivo);
+        List<Archivo> archivos = directorioService.listarBkFile(archivo);
+        model.addAttribute("archivos",archivos);
+
+        return "directorio/bkArchivoTabla";
     }
+    
 }
