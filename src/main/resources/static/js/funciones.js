@@ -8,6 +8,6 @@ for (let i = 0; i < btnInfo.length; i++) {
         fetch(link[i].getAttribute('value'))
             .then(response => response.text())
             .then(data => modalTablaResultado.innerHTML = data);
-
+        console.log(link[i].getAttribute('value'));
     })
 }

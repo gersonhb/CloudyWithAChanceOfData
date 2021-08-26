@@ -23,7 +23,8 @@
                 </div>
                 <div class="row my-1">
                     <input type="submit" value="<-" class="col-1 btn btn-outline-primary border btn-sm">
-                    <span class="col ruta">Ruta: <strong name="ruta">/</strong></span>
+                    <span class="col ruta" th:if="${ruta==''}">Ruta: <span th:text="'/'" id="ruta"></span></span>
+                    <span class="col ruta" th:if="${ruta!=''}">Ruta: <span th:text="${ruta}" id="ruta"></span></span>
                 </div>
                 <div class="row my-1">
                     <table class="table table-stiped table-hover" ref="tabla">
@@ -39,7 +40,11 @@
                             <tr th:each="dir : ${directorios}">
                                 <td th:text="${dir.nombre}" th:if="${!dir.esDirectorio}"></td>
                                 <td th:if="${dir.esDirectorio}">
-                                    <a th:href="@{/directorio/}+${dir.nombre}" class="carpeta" th:text="${dir.nombre}">
+                                    <a th:href="@{/directorio/}+${#strings.replace(ruta,'/','+')}+'+'+${dir.nombre}" class="carpeta" th:text="${dir.nombre}"
+                                        th:if="${ruta!='/'}">
+                                    </a>
+                                    <a th:href="@{/directorio/}+${dir.nombre}" class="carpeta" th:text="${dir.nombre}"
+                                        th:if="${ruta=='/'}">
                                     </a>
                                 </td>
                                 <td class="col-1 td_col" th:text="${dir.size}"></td>
@@ -48,9 +53,14 @@
                                     <button class="col-1 btn btn-success btn-sm info" type="button"
                                         data-bs-toggle="modal" data-bs-target="#bkArchivoModal">i</button>
                                     <input type="hidden" class="link"
-                                        th:value="'/directorio/bkArchivo/'+${dir.nombre}" />
+                                        th:value="'/directorio/bkArchivo/'+${#strings.replace(ruta,'/','+')}+'='+${dir.nombre}"
+                                        th:if="${ruta!='/'}" />
+                                    <input type="hidden" class="link" th:value="'/directorio/bkArchivo/'+${dir.nombre}"
+                                        th:if="${ruta=='/'}" />
+                                    <a th:href="@{/directorio/descarga/}+${#strings.replace(ruta,'/','+')}+'='+${dir.nombre}"
+                                        class="col-1 btn btn-primary btn-sm" download th:if="${ruta!='/'}">V</a>
                                     <a th:href="@{/directorio/descarga/}+${dir.nombre}"
-                                        class="col-1 btn btn-primary btn-sm" download>V</a>
+                                        class="col-1 btn btn-primary btn-sm" download th:if="${ruta=='/'}">V</a>
                                     <a class="col-1 btn btn-danger btn-sm">X</a>
                                 </td>
                                 <td class="col-2 td_col" th:if="${dir.esDirectorio}">

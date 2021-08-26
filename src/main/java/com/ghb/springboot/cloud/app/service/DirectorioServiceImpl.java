@@ -24,14 +24,14 @@ public class DirectorioServiceImpl implements IDirectorioService {
     private IConfiguracionService configuracionService;
 
     @Override
-    public List<Archivo> listarDirectorio(){
+    public List<Archivo> listarDirectorio(String dir){
 
         Configuracion configuracion = configuracionService.findByParametro("ROOT");
         List<Archivo> ls=new ArrayList<>();
         Stream<Path> stream=null;
 
         try {
-            stream = Files.list(Paths.get(configuracion.getValor()));
+            stream = Files.list(Paths.get(configuracion.getValor()+"/"+dir));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,6 +39,7 @@ public class DirectorioServiceImpl implements IDirectorioService {
         ls=stream
         .sorted()
         .filter(n->!(n.getFileName().toString().matches("^[a-zA-Z0-9._]+_\\d\\.[a-zA-Z0-9]+$")))
+        .filter(n->!(n.getFileName().toString().matches("^[a-zA-Z0-9._]+_\\d$")))
         .map(n->	
            	new Archivo(
             n.toFile().getName(), 
@@ -55,32 +56,74 @@ public class DirectorioServiceImpl implements IDirectorioService {
     }
 
 	@Override
-	public List<Archivo> listarBkFile(String archivo) {
+	public List<Archivo> listarBkFile(String ruta,String archivo) {
 		Configuracion configuracion = configuracionService.findByParametro("ROOT");
         List<Archivo> ls=new ArrayList<>();
         Stream<Path> stream=null;
+        
+        /*if(!archivo.contains("/"))
+        {
+
+            parts=archivo.split("\\.");
+            try {
+                stream = Files.list(Paths.get(configuracion.getValor()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            String[] ruta=archivo.split("/.+$");
+            parts=ruta[1].split("\\.");
+            try {
+                stream = Files.list(Paths.get(configuracion.getValor()+ruta[0]));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }*/
+
         String[] parts=archivo.split("\\.");
 
         try {
-            stream = Files.list(Paths.get(configuracion.getValor()));
+            stream = Files.list(Paths.get(configuracion.getValor()+ruta));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        ls=stream
-        .sorted()
-        .filter(n->n.getFileName().toString().matches("^"+parts[0]+"_\\d\\."+parts[1]+"$"))
-        .map(n->	
-           	new Archivo(
-            n.toFile().getName(), 
-            n.toFile().length(),
-            Instant.ofEpochMilli(
-                (n.toFile().lastModified()))
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime(),
-            n.toFile().isDirectory()))
-        .collect(Collectors.toList());
-        stream.close();
+        if(parts.length!=1)
+        {
+            ls=stream
+            .sorted()
+            .filter(n->n.getFileName().toString().matches("^"+parts[0]+"_\\d\\."+parts[1]+"$"))
+            .map(n->	
+                new Archivo(
+                n.toFile().getName(), 
+                n.toFile().length(),
+                Instant.ofEpochMilli(
+                    (n.toFile().lastModified()))
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime(),
+                n.toFile().isDirectory()))
+            .collect(Collectors.toList());
+            stream.close();
+        }
+        else
+        {
+            ls=stream
+            .sorted()
+            .filter(n->n.getFileName().toString().matches("^"+archivo+"_\\d$"))
+            .map(n->	
+                new Archivo(
+                n.toFile().getName(), 
+                n.toFile().length(),
+                Instant.ofEpochMilli(
+                    (n.toFile().lastModified()))
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime(),
+                n.toFile().isDirectory()))
+            .collect(Collectors.toList());
+            stream.close();
+        }
 
         return ls;
 	}

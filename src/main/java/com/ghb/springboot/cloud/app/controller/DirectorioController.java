@@ -37,10 +37,11 @@ public class DirectorioController {
     @GetMapping({"/",""})
     public String vistaDirectorio(Model model)
     {
-        List<Archivo> directorios=directorioService.listarDirectorio();
+        List<Archivo> directorios=directorioService.listarDirectorio("");
         
         model.addAttribute("titulo", "Directorio Compartido");
         model.addAttribute("directorios", directorios);
+        model.addAttribute("ruta", "");
         
         return "directorio/directorio";
     }
@@ -71,10 +72,29 @@ public class DirectorioController {
     @GetMapping("/bkArchivo/{archivo}")
     public String listarBkArchivos(@PathVariable String archivo, Model model)
     {
-        List<Archivo> archivos = directorioService.listarBkFile(archivo);
+        String[] parts=archivo.split("=");
+        List<Archivo> archivos=null;
+
+        if(parts.length==1)
+            archivos = directorioService.listarBkFile("/",archivo);
+        else
+            archivos = directorioService.listarBkFile("/"+parts[0].replaceAll("\\+", "/"),parts[1]);
+        
         model.addAttribute("archivos",archivos);
 
         return "directorio/bkArchivoTabla";
     }
+
+    @GetMapping("/{dir}")
+    public String vistaSubDirectorio(@PathVariable String dir, Model model) {
+        
+        List<Archivo> directorios=directorioService.listarDirectorio(dir.replaceAll("\\+", "/"));
+        model.addAttribute("titulo", "Directorio Compartido");
+        model.addAttribute("directorios", directorios);
+        model.addAttribute("ruta", dir.replaceAll("\\+", "/"));
+
+        return "directorio/directorio";
+    }
+    
     
 }

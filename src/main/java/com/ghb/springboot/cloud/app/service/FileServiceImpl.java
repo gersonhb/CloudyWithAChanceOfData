@@ -61,32 +61,57 @@ public class FileServiceImpl implements IFileService{
                 String[] parts = file.getOriginalFilename().split("\\.");
                 Path source=null;
                 
-                for(int i=bkFile-2;i>=0;i--)
+                if(parts.length!=1)
                 {
-                    if(i==0)
+                    for(int i=bkFile-2;i>=0;i--)
                     {
-                        source=Paths.get(root.getValor()+"/"+file.getOriginalFilename());
-                        Files.move(source,source.resolveSibling(parts[0]+"_"+(i+1)+"."+parts[1]),
-                            StandardCopyOption.REPLACE_EXISTING);
+                        if(i==0)
+                        {
+                            source=Paths.get(root.getValor()+"/"+file.getOriginalFilename());
+                            Files.move(source,source.resolveSibling(parts[0]+"_"+(i+1)+"."+parts[1]),
+                                StandardCopyOption.REPLACE_EXISTING);
 
-                        break;
+                            break;
+                        }
+                        if(new File(root.getValor()+"/"+parts[0]+"_"+i+"."+parts[1]).exists())
+                        {
+                            source=Paths.get(root.getValor()+"/"+parts[0]+"_"+i+"."+parts[1]);
+                            Files.move(source,source.resolveSibling(parts[0]+"_"+(i+1)+"."+parts[1]),
+                                StandardCopyOption.REPLACE_EXISTING);
+                        }
+                        
+
                     }
-                    if(new File(root.getValor()+"/"+parts[0]+"_"+i+"."+parts[1]).exists())
+                }
+                else
+                {
+                    for(int i=bkFile-2;i>=0;i--)
                     {
-                        source=Paths.get(root.getValor()+"/"+parts[0]+"_"+i+"."+parts[1]);
-                        Files.move(source,source.resolveSibling(parts[0]+"_"+(i+1)+"."+parts[1]),
-                            StandardCopyOption.REPLACE_EXISTING);
-                    }
-                    
+                        if(i==0)
+                        {
+                            source=Paths.get(root.getValor()+"/"+file.getOriginalFilename());
+                            Files.move(source,source.resolveSibling(file.getOriginalFilename()+"_"+(i+1)),
+                                StandardCopyOption.REPLACE_EXISTING);
 
+                            break;
+                        }
+                        if(new File(root.getValor()+"/"+file.getOriginalFilename()+"_"+i).exists())
+                        {
+                            source=Paths.get(root.getValor()+"/"+file.getOriginalFilename()+"_"+i);
+                            Files.move(source,source.resolveSibling(file.getOriginalFilename()+"_"+(i+1)),
+                                StandardCopyOption.REPLACE_EXISTING);
+                        }
+                    }
                 }
 
-                Path ruta=Paths.get(root.getValor()+"/"+file.getOriginalFilename());            
-                Files.write(ruta,bytes);
+                    Path ruta=Paths.get(root.getValor()+"/"+file.getOriginalFilename());            
+                    Files.write(ruta,bytes);
 
-                cifradoService.encriptar(root.getValor()+"/"+file.getOriginalFilename());
+                    cifradoService.encriptar(root.getValor()+"/"+file.getOriginalFilename());
 
-                return "El archivo "+file.getOriginalFilename()+" se ha actualizado exitosamente";
+                    return "El archivo "+file.getOriginalFilename()+" se ha actualizado exitosamente";
+                
+
             }
         } catch (IOException e) {
             return "Error al subir archivo";
