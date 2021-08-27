@@ -47,18 +47,17 @@ public class DirectorioController {
     }
 
     @PostMapping("/upload")
-    public String subirArchivo(@RequestParam MultipartFile file,RedirectAttributes flash)
+    public String subirArchivo(@RequestParam MultipartFile file,RedirectAttributes flash,@RequestParam String ruta)
     {
-        flash.addFlashAttribute("info",uploadService.subirArchivo(file));
+        flash.addFlashAttribute("info",uploadService.subirArchivo(file,ruta));
 
         return "redirect:/directorio";
     }
 
     @PostMapping("/mkdir")
-    public String mkdir(@RequestParam String directorio, RedirectAttributes flash)
+    public String mkdir(@RequestParam String directorio,@RequestParam String ruta, RedirectAttributes flash)
     {
-        System.out.println("\""+directorio+"\"");
-        flash.addFlashAttribute("info", directorioService.mkdir(directorio));
+        flash.addFlashAttribute("info", directorioService.mkdir(directorio,ruta));
 
         return "redirect:/directorio";
     }

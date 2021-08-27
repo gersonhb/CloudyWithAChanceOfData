@@ -5,6 +5,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface IFileService {
     
-    public String subirArchivo(MultipartFile file);
+    public String subirArchivo(MultipartFile file,String ruta);
     public ResponseEntity<Object> descargasArchivo(String archivo);
 }

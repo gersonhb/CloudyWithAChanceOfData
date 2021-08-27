@@ -10,6 +10,7 @@
 </head>
 
 <body>
+    <div class="wrapper">
     <header th:fragment="header">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
@@ -56,6 +57,7 @@
         <div class="alert alert-warning" th:if="${warning!=null}" th:text="${warning}"></div>
         <div class="alert alert-info" th:if="${info!=null}" th:text="${info}"></div>
     </header>
+    </div>
     <footer th:fragment="footer" class="text-white card-footer">
         <h5 class="footer">Este programa es libre, puedes redistribuirlo y/o modificarlo bajo los términos de la GNU
             General

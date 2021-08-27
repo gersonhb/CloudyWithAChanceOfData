@@ -31,7 +31,7 @@ public class FileServiceImpl implements IFileService{
     }
 
     @Override
-    public String subirArchivo(MultipartFile file) {
+    public String subirArchivo(MultipartFile file,String dir) {
         
         Configuracion root=configuracionService.findByParametro("ROOT");
         Configuracion keyParam=configuracionService.findByParametro("KEY_FILE");
@@ -47,12 +47,12 @@ public class FileServiceImpl implements IFileService{
         try {
             byte[] bytes=file.getBytes();
             
-            if(!new File(root.getValor()+"/"+file.getOriginalFilename()).exists())
+            if(!new File(root.getValor()+dir+file.getOriginalFilename()).exists())
             {
-                Path ruta=Paths.get(root.getValor()+"/"+file.getOriginalFilename());            
+                Path ruta=Paths.get(root.getValor()+dir+file.getOriginalFilename());            
                 Files.write(ruta,bytes);
 
-                cifradoService.encriptar(root.getValor()+"/"+file.getOriginalFilename());
+                cifradoService.encriptar(root.getValor()+dir+file.getOriginalFilename());
 
                 return "El archivo "+file.getOriginalFilename()+" se ha subido exitosamente";
             }
@@ -67,15 +67,15 @@ public class FileServiceImpl implements IFileService{
                     {
                         if(i==0)
                         {
-                            source=Paths.get(root.getValor()+"/"+file.getOriginalFilename());
+                            source=Paths.get(root.getValor()+dir+file.getOriginalFilename());
                             Files.move(source,source.resolveSibling(parts[0]+"_"+(i+1)+"."+parts[1]),
                                 StandardCopyOption.REPLACE_EXISTING);
 
                             break;
                         }
-                        if(new File(root.getValor()+"/"+parts[0]+"_"+i+"."+parts[1]).exists())
+                        if(new File(root.getValor()+dir+parts[0]+"_"+i+"."+parts[1]).exists())
                         {
-                            source=Paths.get(root.getValor()+"/"+parts[0]+"_"+i+"."+parts[1]);
+                            source=Paths.get(root.getValor()+dir+parts[0]+"_"+i+"."+parts[1]);
                             Files.move(source,source.resolveSibling(parts[0]+"_"+(i+1)+"."+parts[1]),
                                 StandardCopyOption.REPLACE_EXISTING);
                         }
@@ -89,25 +89,25 @@ public class FileServiceImpl implements IFileService{
                     {
                         if(i==0)
                         {
-                            source=Paths.get(root.getValor()+"/"+file.getOriginalFilename());
+                            source=Paths.get(root.getValor()+dir+file.getOriginalFilename());
                             Files.move(source,source.resolveSibling(file.getOriginalFilename()+"_"+(i+1)),
                                 StandardCopyOption.REPLACE_EXISTING);
 
                             break;
                         }
-                        if(new File(root.getValor()+"/"+file.getOriginalFilename()+"_"+i).exists())
+                        if(new File(root.getValor()+dir+file.getOriginalFilename()+"_"+i).exists())
                         {
-                            source=Paths.get(root.getValor()+"/"+file.getOriginalFilename()+"_"+i);
+                            source=Paths.get(root.getValor()+dir+file.getOriginalFilename()+"_"+i);
                             Files.move(source,source.resolveSibling(file.getOriginalFilename()+"_"+(i+1)),
                                 StandardCopyOption.REPLACE_EXISTING);
                         }
                     }
                 }
 
-                    Path ruta=Paths.get(root.getValor()+"/"+file.getOriginalFilename());            
+                    Path ruta=Paths.get(root.getValor()+dir+file.getOriginalFilename());            
                     Files.write(ruta,bytes);
 
-                    cifradoService.encriptar(root.getValor()+"/"+file.getOriginalFilename());
+                    cifradoService.encriptar(root.getValor()+dir+file.getOriginalFilename());
 
                     return "El archivo "+file.getOriginalFilename()+" se ha actualizado exitosamente";
                 

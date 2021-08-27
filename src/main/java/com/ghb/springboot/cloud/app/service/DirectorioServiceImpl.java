@@ -38,8 +38,8 @@ public class DirectorioServiceImpl implements IDirectorioService {
 
         ls=stream
         .sorted()
-        .filter(n->!(n.getFileName().toString().matches("^[a-zA-Z0-9._]+_\\d\\.[a-zA-Z0-9]+$")))
-        .filter(n->!(n.getFileName().toString().matches("^[a-zA-Z0-9._]+_\\d$")))
+        .filter(n->!(n.getFileName().toString().matches("^.+_\\d\\.[a-zA-Z0-9]+$")))
+        .filter(n->!(n.getFileName().toString().matches("^.+_\\d$")))
         .map(n->	
            	new Archivo(
             n.toFile().getName(), 
@@ -129,12 +129,12 @@ public class DirectorioServiceImpl implements IDirectorioService {
 	}
 
 	@Override
-	public String mkdir(String directorio) {
+	public String mkdir(String directorio,String ruta) {
 		
         Configuracion configuracion=configuracionService.findByParametro("ROOT");
-        Path d=Paths.get(configuracion.getValor()+"/"+directorio);
+        Path d=Paths.get(configuracion.getValor()+ruta+directorio);
         
-        if(directorio.matches("^[a-zA-Z][a-zA-Z0-9.-_ ]{1,15}"))
+        if(directorio.matches("^[a-zA-Z][ a-zA-Z0-9.-]{1,15}"))
         {
             if(Files.exists(d))
             {

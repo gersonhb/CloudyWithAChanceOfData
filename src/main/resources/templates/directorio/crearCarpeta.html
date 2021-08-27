@@ -11,6 +11,10 @@
         <form method="POST" th:action="@{/directorio/mkdir}">
           <div class="modal-body">
             <input type="text" placeholder="Nombre de Carpeta" name="directorio" class="form-control">
+            <input type="hidden" class="link"
+              th:value="'/'+${ruta}+'/'" name="ruta"
+              th:if="${ruta!=''}" />
+            <input type="hidden" class="link" th:value="'/'" th:if="${ruta==''}" name="ruta"/>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
