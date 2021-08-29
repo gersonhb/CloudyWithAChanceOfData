@@ -35,17 +35,29 @@ public class ConfiguracionServiceImpl implements IConfiguracionService {
                     new Configuracion("IV_FILE", "0"),
                     new Configuracion("BK_FILE","3")));
 
+            File directorio=null;
+            String root="";
+            
+            if(System.getProperty("os.name").contains("Windows"))
+            {
+                root="\\ROOT_CLOUD";
+                directorio = new File(System.getProperty("user.dir")+root);
+            }
+            else
+            {
+                root="/ROOT_CLOUD";
+                directorio = new File(System.getProperty("user.dir")+root);
+            }
 
-            File directorio = new File(System.getProperty("user.dir")+"/ROOT_CLOUD");
             if (!directorio.exists()) {
                 if (directorio.mkdirs()) {
-                    updateConfiguracion("ROOT", System.getProperty("user.dir")+"/ROOT_CLOUD");
+                    updateConfiguracion("ROOT", System.getProperty("user.dir")+root);
                 } else {
                     System.out.println("Error al crear directorio ROOT_CLOUD");
                 }
             }
             else
-                updateConfiguracion("ROOT", System.getProperty("user.dir")+"/ROOT_CLOUD");
+                updateConfiguracion("ROOT", System.getProperty("user.dir")+root);
 
         }
 

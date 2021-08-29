@@ -33,9 +33,15 @@ function ValidarRuta()
         .then(response => {
             alerta.innerHTML=response[0];
             if(response[1]=="1")
+            {
+                alerta.classList.remove("text-danger");
                 alerta.classList.add("text-success");
+            }   
             else
+            {
+                alerta.classList.remove("text-success");
                 alerta.classList.add("text-danger");
+            }
             });  
 }
 

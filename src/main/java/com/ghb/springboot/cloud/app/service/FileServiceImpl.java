@@ -3,6 +3,8 @@ package com.ghb.springboot.cloud.app.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.ClosedFileSystemException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -123,15 +125,19 @@ public class FileServiceImpl implements IFileService{
     public ResponseEntity<Object> descargasArchivo(String dir,String archivo) {
         
         Configuracion root=configuracionService.findByParametro("ROOT");
+        
+        if(System.getProperty("os.name").contains("Windows"))
+            dir=dir.replace("/", "\\");
 
         ResponseEntity<Object> responseEntity=null;
         try {
             
             cifradoService.desencriptar(root.getValor()+dir+archivo);
             
-            File file = new File(root.getValor()+dir+archivo+".unlock");
-
-            InputStreamResource resource= new InputStreamResource(new FileInputStream(file));
+            //File file = new File(root.getValor()+dir+archivo+".unlock");
+            Path f=Paths.get(root.getValor()+dir+archivo+".unlock");
+            InputStreamResource resource= new InputStreamResource(new FileInputStream(f.toFile()));
+            //f.getFileSystem().close();
             
             HttpHeaders headers=new HttpHeaders();
 
@@ -142,10 +148,12 @@ public class FileServiceImpl implements IFileService{
             headers.add("Expires", "0");
 
             responseEntity=ResponseEntity.ok().headers(headers)
-            .contentLength(file.length())
+            .contentLength(f.toFile().length())
             .contentType(MediaType.parseMediaType("application/txt")).body(resource);
 
-            file.delete();
+            FileSystems.getDefault().getPath(root.getValor()+dir+archivo+".unlock").getFileSystem().close();
+            System.out.println(Paths.get(root.getValor()+dir+archivo+".unlock").getFileSystem().isOpen());
+            Files.delete(Paths.get(root.getValor()+dir+archivo+".unlock"));
 
         } catch (Exception e) {
             e.printStackTrace();

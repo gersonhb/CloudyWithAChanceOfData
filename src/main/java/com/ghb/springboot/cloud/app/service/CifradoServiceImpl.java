@@ -2,8 +2,8 @@ package com.ghb.springboot.cloud.app.service;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.NoSuchAlgorithmException;
@@ -50,16 +50,21 @@ public class CifradoServiceImpl implements ICifradoService {
 
         Configuracion configuracion = configuracionService.findByParametro("KEY_RUTA");
         String mensaje = "";
+        String key="";
+        if(System.getProperty("os.name").contains("Windows"))
+            key="\\key";
+        else
+            key="/key";
 
         if (configuracion.getValor() == "") {
             try {
-                FileOutputStream outputStreamKey = new FileOutputStream(System.getProperty("user.dir") + "/key");
+                FileOutputStream outputStreamKey = new FileOutputStream(System.getProperty("user.dir") + key);
 
                 outputStreamKey.write(generarClave().getEncoded());
 
                 outputStreamKey.close();
 
-                configuracionService.updateConfiguracion("KEY_RUTA", System.getProperty("user.dir") + "/key");
+                configuracionService.updateConfiguracion("KEY_RUTA", System.getProperty("user.dir") + key);
                 configuracionService.updateConfiguracion("KEY_FILE", "1");
 
                 mensaje = "Se generó KEY exitosamente";
@@ -79,16 +84,21 @@ public class CifradoServiceImpl implements ICifradoService {
 
         Configuracion configuracion = configuracionService.findByParametro("IV_RUTA");
         String mensaje = "";
+        String iv="";
+        if(System.getProperty("os.name").contains("Windows"))
+            iv="\\iv";
+        else
+            iv="/iv";
 
         if (configuracion.getValor() == "") {
             try {
-                FileOutputStream outputStreamIv = new FileOutputStream(System.getProperty("user.dir") + "/iv");
+                FileOutputStream outputStreamIv = new FileOutputStream(System.getProperty("user.dir") + iv);
 
                 outputStreamIv.write(generarIv().getIV());
 
                 outputStreamIv.close();
 
-                configuracionService.updateConfiguracion("IV_RUTA", System.getProperty("user.dir") + "/iv");
+                configuracionService.updateConfiguracion("IV_RUTA", System.getProperty("user.dir") + iv);
                 configuracionService.updateConfiguracion("IV_FILE", "1");
 
                 mensaje = "Se generó IV exitosamente";
@@ -153,13 +163,10 @@ public class CifradoServiceImpl implements ICifradoService {
                 outputStream.write(outputBytes);
             }
 
+            outputStream.flush();
             inputStream.close();
             outputStream.close();
-
-
-            Path dest=Paths.get(ruta);
-            Path source=Paths.get(ruta+".lock");
-            Files.move(source, dest,StandardCopyOption.REPLACE_EXISTING);
+            Files.move(Paths.get(ruta+".lock"), Paths.get(ruta),StandardCopyOption.REPLACE_EXISTING);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -167,7 +174,7 @@ public class CifradoServiceImpl implements ICifradoService {
     }
 
     @Override
-    public void desencriptar(String ruta) {
+    public void desencriptar(String ruta) {        
         try {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, leerKey(), leerIv());
@@ -187,7 +194,7 @@ public class CifradoServiceImpl implements ICifradoService {
             if (outputBytes != null) {
                 outputStream.write(outputBytes);
             }
-
+            
             inputStream.close();
             outputStream.close();
         } catch (Exception e) {
