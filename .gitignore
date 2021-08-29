@@ -37,13 +37,9 @@ out/
 .vscode/
 
 ## H2 Database ##
-cloud_db.mv.db
-cloud_db.trace.db
-
-## Ruta Compartida ##
-ROOT_CLOUD/
+*.mv.db
+*.trace.db
 
 ## Cifrado ##
 iv
 key
-cloud_db.mv.db
