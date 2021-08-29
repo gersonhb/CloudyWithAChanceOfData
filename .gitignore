@@ -46,3 +46,4 @@ ROOT_CLOUD/
 ## Cifrado ##
 iv
 key
+cloud_db.mv.db

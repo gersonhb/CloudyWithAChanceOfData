@@ -128,4 +128,41 @@ public class ConfiguracionServiceImpl implements IConfiguracionService {
             return  List.of("La ruta ingresada no es válida","0");
     }
 
+    @Transactional
+    @Override
+    public String guardarConfig(String root, String key, String iv, Integer cant) {
+        
+        List<Configuracion> configuraciones=configuracionRepository.findAll();
+
+        Boolean validacion = validarRuta(root).get(1).equals("1") &&
+            validarArchivosCifrado(key).get(1).equals("1") &&
+            validarArchivosCifrado(iv).get(1).equals("1") && 
+            cant >=1 && cant <=5;
+        
+        if (validacion)
+        {
+            Configuracion root_dir = configuracionRepository.findByParametro(configuraciones.get(0).getParametro());
+            Configuracion key_dir = configuracionRepository.findByParametro(configuraciones.get(1).getParametro());
+            Configuracion iv_dir = configuracionRepository.findByParametro(configuraciones.get(2).getParametro());
+            Configuracion bk_cant = configuracionRepository.findByParametro(configuraciones.get(5).getParametro());
+
+            root_dir.setValor(root);
+            key_dir.setValor(key);
+            iv_dir.setValor(iv);
+            bk_cant.setValor(cant.toString());
+
+            configuracionRepository.save(root_dir);
+            configuracionRepository.save(key_dir);
+            configuracionRepository.save(iv_dir);
+            configuracionRepository.save(bk_cant);
+
+            return "Se actualizó los parámetros de configuración";
+        }
+        else
+            return "No se ha podido actualizar los cambios, valide que las rutas escogidas sean válidas y que la cantidad de backup esté entre 1 y 5";
+            
+    }
+
+    
+
 }

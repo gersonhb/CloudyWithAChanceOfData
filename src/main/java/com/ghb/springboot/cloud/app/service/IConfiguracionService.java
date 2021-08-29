@@ -13,5 +13,6 @@ public interface IConfiguracionService {
     public Long sizeDirectorio();
     public List<String> validarRuta(String ruta);
     public List<String> validarArchivosCifrado(String ruta);
+    public String guardarConfig(String root,String key,String iv,Integer cant);
     
 }
