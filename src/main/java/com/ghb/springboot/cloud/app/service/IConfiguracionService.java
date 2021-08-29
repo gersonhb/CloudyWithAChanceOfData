@@ -11,5 +11,7 @@ public interface IConfiguracionService {
     public Configuracion findByParametro(String parametro);
     public void updateConfiguracion(String parametro,String ruta);
     public Long sizeDirectorio();
+    public List<String> validarRuta(String ruta);
+    public List<String> validarArchivosCifrado(String ruta);
     
 }

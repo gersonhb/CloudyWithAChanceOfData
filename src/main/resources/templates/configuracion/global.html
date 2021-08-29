@@ -11,66 +11,71 @@
                 <h3 th:text="${titulo}"></h3>
             </div>
             <div class="card-body">
-                <form method="POST">
-                    <table class="table table-striped table-bordered table-hover">
-                        <tbody>
-                            <tr>
-                                <td class="col-1"><b>Sistema Operativo</b></td>
-                                <td class="col-2">
-                                    <input type="text" disabled th:value="${os}">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="col-1"><b>Usuario de Sistema Operativo</b></td>
-                                <td class="col-2">
-                                    <input type="text" disabled th:value="${user_os}">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="col-1"><b>Root</b></td>
-                                <td class="col-2">
-                                    <input type="text" placeholder="Ruta" style="width: 300px;"
-                                        th:value="${configuraciones[0].valor}" name="root">
-                                    <a href="#" class="btn btn-primary">Validar ruta</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="col-1"><b>Espacio utilizado / Espacio disponible</b></td>
-                                <td class="col-2">
-                                    <input type="text" disabled th:value="${use_disk}+' / ' +${free_disk}">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="col-1"><b>Archivo KEY</b></td>
-                                <td class="col-2">
-                                    <input type="text" placeholder="Ruta" style="width: 300px;"
-                                        th:value="${configuraciones[1].valor}" name="key">
-                                    <a href="#" class="btn btn-primary">Validar ruta</a>
-                                    <a th:href="@{/administrador/configuracion/global/key}" class="btn btn-primary"
-                                        th:if="${configuraciones[3].valor=='0'}">Generar KEY</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="col-1"><b>Archivo IV</b></td>
-                                <td class="col-2">
-                                    <input type="text" placeholder="Ruta" style="width: 300px;"
-                                        th:value="${configuraciones[2].valor}" name="iv">
-                                    <a href="#" class="btn btn-primary">Validar ruta</a>
-                                    <a th:href="@{/administrador/configuracion/global/iv}" class="btn btn-primary"
-                                        th:if="${configuraciones[4].valor=='0'}">Generar IV</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="col-1"><b>Número de backup por archivo</b></td>
-                                <td class="col-2">
-                                    <input type="number" placeholder="Numero de backup" style="width: 300px;"
-                                        th:value="${configuraciones[5].valor}" name="bkfile">
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <input type="submit" class="btn btn-primary" value="Guardar Cambios">
-                </form>
+                <table class="table table-striped table-bordered table-hover">
+                    <tbody>
+                        <tr>
+                            <td class="col-1"><b>Sistema Operativo</b></td>
+                            <td class="col-2">
+                                <input type="text" disabled th:value="${os}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-1"><b>Usuario de Sistema Operativo</b></td>
+                            <td class="col-2">
+                                <input type="text" disabled th:value="${user_os}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-1"><b>Root</b></td>
+                            <td class="col-2">
+                                <!--<form method="POST" th:action="@{/administrador/configuracion/global/validarRuta}">-->
+                                <input type="text" placeholder="Ruta" style="width: 300px;"
+                                    th:value="${configuraciones[0].valor}" name="root" id="valorRuta">
+                                <button type="button" class="btn btn-primary" id="validarRuta"
+                                    onclick="ValidarRuta();">Validar ruta</button>
+                                <span id="validacionRuta" class="text" style="margin-left: 8px;"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-1"><b>Espacio utilizado / Espacio disponible</b></td>
+                            <td class="col-2">
+                                <input type="text" disabled th:value="${use_disk}+' / ' +${free_disk}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-1"><b>Archivo KEY</b></td>
+                            <td class="col-2">
+                                <input type="text" placeholder="Ruta" style="width: 300px;"
+                                    th:value="${configuraciones[1].valor}" name="key" id="valorKey">
+                                <button type="submit" class="btn btn-primary"
+                                    onclick="ValidarCifrado('valorKey','validacionKey');">Validar ruta</button>
+                                <span id="validacionKey" class="text" style="margin-left: 8px;"></span>
+                                <a th:href="@{/administrador/configuracion/global/key}" class="btn btn-primary"
+                                    th:if="${configuraciones[3].valor=='0'}">Generar KEY</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-1"><b>Archivo IV</b></td>
+                            <td class="col-2">
+                                <input type="text" placeholder="Ruta" style="width: 300px;"
+                                    th:value="${configuraciones[2].valor}" name="iv" id="valorIv">
+                                <button type="submit" class="btn btn-primary"
+                                    onclick="ValidarCifrado('valorIv','validacionIv');">Validar ruta</button>
+                                <span id="validacionIv" class="text" style="margin-left: 8px;"></span>
+                                <a th:href="@{/administrador/configuracion/global/iv}" class="btn btn-primary"
+                                    th:if="${configuraciones[4].valor=='0'}">Generar IV</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-1"><b>Número de backup por archivo</b></td>
+                            <td class="col-2">
+                                <input type="number" placeholder="Numero de backup" style="width: 300px;" min="1"
+                                    max="5" th:value="${configuraciones[5].valor}" name="bkfile">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <input type="submit" class="btn btn-primary" value="Guardar Cambios">
             </div>
         </div>
     </div>

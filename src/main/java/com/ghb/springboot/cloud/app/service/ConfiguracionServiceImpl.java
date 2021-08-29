@@ -99,4 +99,33 @@ public class ConfiguracionServiceImpl implements IConfiguracionService {
         return size;
     }
 
+    @Override
+    public List<String> validarRuta(String ruta) {
+        
+        Path dir=Paths.get(ruta);
+        
+        Boolean existe = Files.exists(dir);
+        Boolean esDirectorio = Files.isDirectory(dir);
+        Boolean permisoEscritura = Files.isWritable(dir);
+
+        if (existe && esDirectorio && permisoEscritura)
+            return List.of("La ruta ingresada es válida","1");
+        else
+            return List.of("La ruta ingresada no es válida","0");
+    }
+
+    @Override
+    public List<String> validarArchivosCifrado(String ruta) {
+        Path dir=Paths.get(ruta);
+
+        Boolean existe = Files.exists(dir);
+        Boolean esArchivo = Files.isRegularFile(dir);
+        Boolean permisoLectura = Files.isReadable(dir);
+
+        if (existe && esArchivo && permisoLectura)
+            return List.of("La ruta ingresada es válida","1");
+        else
+            return  List.of("La ruta ingresada no es válida","0");
+    }
+
 }

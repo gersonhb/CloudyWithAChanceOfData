@@ -120,16 +120,16 @@ public class FileServiceImpl implements IFileService{
     }
 
     @Override
-    public ResponseEntity<Object> descargasArchivo(String archivo) {
+    public ResponseEntity<Object> descargasArchivo(String dir,String archivo) {
         
         Configuracion root=configuracionService.findByParametro("ROOT");
 
         ResponseEntity<Object> responseEntity=null;
         try {
             
-            cifradoService.desencriptar(root.getValor()+"/"+archivo);
+            cifradoService.desencriptar(root.getValor()+dir+archivo);
             
-            File file = new File(root.getValor()+"/"+archivo+".unlock");
+            File file = new File(root.getValor()+dir+archivo+".unlock");
 
             InputStreamResource resource= new InputStreamResource(new FileInputStream(file));
             

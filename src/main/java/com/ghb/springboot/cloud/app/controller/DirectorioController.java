@@ -65,8 +65,12 @@ public class DirectorioController {
     @GetMapping("/descarga/{file}")
     public ResponseEntity<Object> acciones(@PathVariable String file)
     {
-        return fileService.descargasArchivo(file);        
-    }
+        String[] parts=file.split("=");
+        if(parts.length==1)        
+            return fileService.descargasArchivo("/",file);
+        else
+            return fileService.descargasArchivo("/"+parts[0].replaceAll("\\+", "/")+"/",parts[1]);
+    }   
 
     @GetMapping("/bkArchivo/{archivo}")
     public String listarBkArchivos(@PathVariable String archivo, Model model)
@@ -77,7 +81,11 @@ public class DirectorioController {
         if(parts.length==1)
             archivos = directorioService.listarBkFile("/",archivo);
         else
+        {
             archivos = directorioService.listarBkFile("/"+parts[0].replaceAll("\\+", "/"),parts[1]);
+            model.addAttribute("ruta",parts[0].replaceAll("\\+", "/"));
+        }
+            
         
         model.addAttribute("archivos",archivos);
 
