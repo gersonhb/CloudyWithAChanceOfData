@@ -3,20 +3,18 @@ package com.ghb.springboot.cloud.app.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.ClosedFileSystemException;
-import java.nio.file.FileSystems;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import javax.servlet.http.HttpServletResponse;
+
 import com.ghb.springboot.cloud.app.entity.Configuracion;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -121,7 +119,7 @@ public class FileServiceImpl implements IFileService{
         
     }
 
-    @Override
+    /*@Override
     public ResponseEntity<Object> descargasArchivo(String dir,String archivo) {
         
         Configuracion root=configuracionService.findByParametro("ROOT");
@@ -149,17 +147,58 @@ public class FileServiceImpl implements IFileService{
 
             responseEntity=ResponseEntity.ok().headers(headers)
             .contentLength(f.toFile().length())
-            .contentType(MediaType.parseMediaType("application/txt")).body(resource);
-
-            FileSystems.getDefault().getPath(root.getValor()+dir+archivo+".unlock").getFileSystem().close();
-            System.out.println(Paths.get(root.getValor()+dir+archivo+".unlock").getFileSystem().isOpen());
-            Files.delete(Paths.get(root.getValor()+dir+archivo+".unlock"));
+            .contentType(MediaType.parseMediaType("application/txt"))
+            .body(resource);
+            
+            f=null;
+            resource=null;
+            headers=null;
+            return responseEntity;
+            //Files.delete(Paths.get(root.getValor()+dir+archivo+".unlock"));
+            //Files.delete(Paths.get(root.getValor()+dir+archivo+".unlock"));
+            //Files.delete(Paths.get(root.getValor()+dir+archivo+".unlock"));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            return responseEntity;
+        }
+        finally
+        {
+            try {
+                responseEntity=null;
+                Files.delete(Paths.get(root.getValor()+dir+archivo+".unlock"));
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
         }
 
-        return responseEntity;
-    }
+        
+    }*/
     
+    @Override
+    public void descargasArchivo(String dir,String archivo, HttpServletResponse response)
+    {
+        Configuracion root=configuracionService.findByParametro("ROOT");
+        
+        if(System.getProperty("os.name").contains("Windows"))
+            dir=dir.replace("/", "\\");
+
+        cifradoService.desencriptar(root.getValor()+dir+archivo);
+        Path file = Paths.get(root.getValor()+dir+archivo+".unlock");
+
+        response.setContentType("application/txt");
+        response.setHeader("Content-disposition", "attachment; filename=" + archivo);
+
+        try {
+            OutputStream out = response.getOutputStream();
+            FileInputStream in = new FileInputStream(file.toFile());
+
+            IOUtils.copy(in, out);
+            out.close();
+            in.close();
+            Files.delete(file);
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

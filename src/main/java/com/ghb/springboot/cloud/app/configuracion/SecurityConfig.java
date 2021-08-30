@@ -11,7 +11,12 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.session.ConcurrentSessionControlAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Configuration
 @EnableWebSecurity
@@ -33,6 +38,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder);
         return provider;
+    }
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
     }
 
     @Override
@@ -59,6 +69,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         .logoutSuccessUrl("/login")
         .and()
         .headers().frameOptions().disable();
+
+        http
+        .sessionManagement()
+        //.invalidSessionUrl("/login?invalid-session=true")
+        .maximumSessions(1);
+        /*.sessionRegistry(sessionRegistry())
+        .expiredUrl("/login")
+        .maxSessionsPreventsLogin(true);*/
+    }
+
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
     }
 
 }

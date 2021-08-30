@@ -2,7 +2,6 @@ package com.ghb.springboot.cloud.app.service;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -163,7 +162,6 @@ public class CifradoServiceImpl implements ICifradoService {
                 outputStream.write(outputBytes);
             }
 
-            outputStream.flush();
             inputStream.close();
             outputStream.close();
             Files.move(Paths.get(ruta+".lock"), Paths.get(ruta),StandardCopyOption.REPLACE_EXISTING);

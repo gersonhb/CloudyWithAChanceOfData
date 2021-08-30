@@ -1,9 +1,10 @@
 package com.ghb.springboot.cloud.app.controller;
 
+import javax.servlet.http.HttpServletResponse;
+
 import com.ghb.springboot.cloud.app.service.IDatabaseTools;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,10 +30,16 @@ public class DatabaseController {
         return "database/configDatabase";
     }
 
-    @GetMapping("/backup")
+    /*@GetMapping("/backup")
     public ResponseEntity<Object> crearBackupDb()
     {
         return databaseTools.backupDb();
+    }*/
+
+    @GetMapping("/backup")
+    public void crearBackupDb(HttpServletResponse response)
+    {
+        databaseTools.backupDb(response);
     }
 
     @ModelAttribute("sizeDatabase")

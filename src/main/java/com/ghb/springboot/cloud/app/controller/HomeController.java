@@ -27,11 +27,17 @@ public class HomeController {
     }
 
     @GetMapping("/login")
-    public String getLoginView(@RequestParam(required = false) String error, Model model,Principal principal,
+    public String getLoginView(@RequestParam(required = false) String error,
+    @RequestParam(value = "invalid-session" ,required = false) String sessionError,
+    Model model,
+    Principal principal,
     RedirectAttributes flash)
     {
         if(error!=null)
             model.addAttribute("error", "Credenciales incorrectas, vuelva a intentar");
+
+        if(sessionError!=null)
+            model.addAttribute("error", "Ya cuentas con una sesión activa, no se permite multiples sesiones");
 
         if(principal!=null)
         {

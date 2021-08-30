@@ -17,13 +17,13 @@
                             <tr>
                                 <td class="col-1"><b>Sistema Operativo</b></td>
                                 <td class="col-2">
-                                    <input type="text" disabled th:value="${os}">
+                                    <span type="text" disabled th:text="${os}"></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-1"><b>Usuario de Sistema Operativo</b></td>
                                 <td class="col-2">
-                                    <input type="text" disabled th:value="${user_os}">
+                                    <span type="text" disabled th:text="${user_os}"></span>
                                 </td>
                             </tr>
                             <tr>
@@ -39,7 +39,7 @@
                             <tr>
                                 <td class="col-1"><b>Espacio utilizado / Espacio disponible</b></td>
                                 <td class="col-2">
-                                    <input type="text" disabled th:value="${use_disk}+' / ' +${free_disk}">
+                                    <span type="text" disabled th:text="${use_disk}+' / ' +${free_disk}"></span>
                                 </td>
                             </tr>
                             <tr>

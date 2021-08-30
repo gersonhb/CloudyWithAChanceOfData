@@ -2,12 +2,13 @@ package com.ghb.springboot.cloud.app.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import com.ghb.springboot.cloud.app.entity.Archivo;
 import com.ghb.springboot.cloud.app.service.IDirectorioService;
 import com.ghb.springboot.cloud.app.service.IFileService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,6 +64,17 @@ public class DirectorioController {
     }
 
     @GetMapping("/descarga/{file}")
+    public void descargaArchivo(@PathVariable String file,HttpServletResponse response)
+    {
+        String[] parts=file.split("=");
+        if(parts.length==1)
+            fileService.descargasArchivo("/",file,response);
+        else
+            fileService.descargasArchivo("/"+parts[0].replaceAll("\\+", "/")+"/",parts[1],response);
+
+    }
+
+    /*@GetMapping("/descarga/{file}")
     public ResponseEntity<Object> acciones(@PathVariable String file)
     {
         String[] parts=file.split("=");
@@ -70,7 +82,7 @@ public class DirectorioController {
             return fileService.descargasArchivo("/",file);
         else
             return fileService.descargasArchivo("/"+parts[0].replaceAll("\\+", "/")+"/",parts[1]);
-    }   
+    }*/
 
     @GetMapping("/bkArchivo/{archivo}")
     public String listarBkArchivos(@PathVariable String archivo, Model model)
@@ -79,7 +91,10 @@ public class DirectorioController {
         List<Archivo> archivos=null;
 
         if(parts.length==1)
+        {    
             archivos = directorioService.listarBkFile("/",archivo);
+            model.addAttribute("ruta","");
+        }
         else
         {
             archivos = directorioService.listarBkFile("/"+parts[0].replaceAll("\\+", "/"),parts[1]);
