@@ -18,48 +18,48 @@ function ReemplazarContenido(contenido) {
     document.open();
     document.write(contenido);
     document.close();
-  }
+}
 
-function ValidarRuta()
-{
+function ValidarRuta() {
     let valorRuta = document.getElementById('valorRuta').value;
     let alerta = document.getElementById('validacionRuta');
 
-    fetch("/validacion/validarRuta",{
+    fetch("/validacion/validarRuta", {
         method: "POST",
         body: valorRuta
     })
         .then(response => response.json())
         .then(response => {
-            alerta.innerHTML=response[0];
-            if(response[1]=="1")
-            {
+            alerta.innerHTML = response[0];
+            if (response[1] == "1") {
                 alerta.classList.remove("text-danger");
                 alerta.classList.add("text-success");
-            }   
-            else
-            {
+            }
+            else {
                 alerta.classList.remove("text-success");
                 alerta.classList.add("text-danger");
             }
-            });  
+        });
 }
 
-function ValidarCifrado(idBtn,idAlerta)
-{
+function ValidarCifrado(idBtn, idAlerta) {
     let valorRuta = document.getElementById(idBtn).value;
     let alerta = document.getElementById(idAlerta);
 
-    fetch("/validacion/validarCifrado",{
+    fetch("/validacion/validarCifrado", {
         method: "POST",
         body: valorRuta
     })
         .then(response => response.json())
         .then(response => {
-            alerta.innerHTML=response[0];
-            if(response[1]=="1")
+            alerta.innerHTML = response[0];
+            if (response[1] == "1") {
+                alerta.classList.remove("text-danger");
                 alerta.classList.add("text-success");
-            else
+            }
+            else {
+                alerta.classList.remove("text-success");
                 alerta.classList.add("text-danger");
-            });  
+            }
+        });
 }
