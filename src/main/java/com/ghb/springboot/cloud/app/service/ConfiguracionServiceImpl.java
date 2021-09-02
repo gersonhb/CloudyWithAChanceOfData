@@ -14,12 +14,17 @@ import com.ghb.springboot.cloud.app.repository.IConfiguracionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 @Service
 public class ConfiguracionServiceImpl implements IConfiguracionService {
 
     @Autowired
     private IConfiguracionRepository configuracionRepository;
+    
+    @Autowired
+    private CommonsMultipartResolver commonsMultipartResolver;
+
 
     @Transactional
     @Override
@@ -33,7 +38,8 @@ public class ConfiguracionServiceImpl implements IConfiguracionService {
                     new Configuracion("IV_RUTA", ""),
                     new Configuracion("KEY_FILE", "0"), 
                     new Configuracion("IV_FILE", "0"),
-                    new Configuracion("BK_FILE","3")));
+                    new Configuracion("BK_FILE","3"),
+                    new Configuracion("MAX_FILE_UPLOAD","5")));
 
             File directorio=null;
             String root="";
@@ -142,14 +148,15 @@ public class ConfiguracionServiceImpl implements IConfiguracionService {
 
     @Transactional
     @Override
-    public String guardarConfig(String root, String key, String iv, Integer cant) {
+    public String guardarConfig(String root, String key, String iv, Integer cant, Integer size) {
         
         List<Configuracion> configuraciones=configuracionRepository.findAll();
 
         Boolean validacion = validarRuta(root).get(1).equals("1") &&
             validarArchivosCifrado(key).get(1).equals("1") &&
             validarArchivosCifrado(iv).get(1).equals("1") && 
-            cant >=1 && cant <=5;
+            cant >=1 && cant <=5 &&
+            size >=3 && size <=1024;
         
         if (validacion)
         {
@@ -157,6 +164,7 @@ public class ConfiguracionServiceImpl implements IConfiguracionService {
             Configuracion key_dir = configuracionRepository.findByParametro(configuraciones.get(1).getParametro());
             Configuracion iv_dir = configuracionRepository.findByParametro(configuraciones.get(2).getParametro());
             Configuracion bk_cant = configuracionRepository.findByParametro(configuraciones.get(5).getParametro());
+            Configuracion size_file = configuracionRepository.findByParametro(configuraciones.get(6).getParametro());
 
             root_dir.setValor(root);
             key_dir.setValor(key);
@@ -168,13 +176,25 @@ public class ConfiguracionServiceImpl implements IConfiguracionService {
             configuracionRepository.save(iv_dir);
             configuracionRepository.save(bk_cant);
 
+            if(size!=Integer.parseInt(size_file.getValor()))
+            {
+                size_file.setValor(size.toString());
+                configuracionRepository.save(size_file);
+                commonsMultipartResolver.setMaxUploadSize(size*1024*1024);
+            }
+
             return "Se actualizó los parámetros de configuración";
         }
         else
-            return "No se ha podido actualizar los cambios, valide que las rutas escogidas sean válidas y que la cantidad de backup esté entre 1 y 5";
+            return "No se ha podido actualizar los cambios, valide que las rutas escogidas sean válidas, que la cantidad de backup esté entre "+
+            "1 y 5 y el tamaño max por archivo no sea mayor a 1GB";
             
     }
 
-    
-
+    @Transactional(readOnly = true)
+    @Override
+    public Long tamanoFileUpload() {
+        return Long.parseLong(
+            configuracionRepository.findByParametro("MAX_FILE_UPLOAD").getValor());
+    }
 }

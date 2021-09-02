@@ -60,27 +60,6 @@ public class DirectorioServiceImpl implements IDirectorioService {
 		Configuracion configuracion = configuracionService.findByParametro("ROOT");
         List<Archivo> ls=new ArrayList<>();
         Stream<Path> stream=null;
-        
-        /*if(!archivo.contains("/"))
-        {
-
-            parts=archivo.split("\\.");
-            try {
-                stream = Files.list(Paths.get(configuracion.getValor()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        else
-        {
-            String[] ruta=archivo.split("/.+$");
-            parts=ruta[1].split("\\.");
-            try {
-                stream = Files.list(Paths.get(configuracion.getValor()+ruta[0]));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }*/
 
         String[] parts=archivo.split("\\.");
 

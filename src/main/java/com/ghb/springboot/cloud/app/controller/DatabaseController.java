@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.ghb.springboot.cloud.app.service.IDatabaseTools;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("administrador/database")
+@Secured(value = "ROLE_ADMINISTRADOR")
 public class DatabaseController {
     
     private IDatabaseTools databaseTools;
@@ -22,7 +24,7 @@ public class DatabaseController {
         this.databaseTools = databaseTools;
     }
 
-    @GetMapping("/")
+    @GetMapping({"/",""})
     public String configDatabase(Model model)
     {
         model.addAttribute("titulo", "Herramientas de Base de Datos");

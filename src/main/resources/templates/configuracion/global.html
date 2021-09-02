@@ -73,6 +73,14 @@
                                         max="5" th:value="${configuraciones[5].valor}" name="bkfile">
                                 </td>
                             </tr>
+                            <tr>
+                                <td class="col-1"><b>Tamaño máximo para subir archivo</b></td>
+                                <td class="col-2">
+                                    <input type="number" placeholder="Numero de backup" style="width: 300px;" min="3"
+                                        max="1000" th:value="${configuraciones[6].valor}" name="size">
+                                    <span>(MB) ingresar tamaño en MegaBytes</span>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                     <button type="submit" class="btn btn-primary"

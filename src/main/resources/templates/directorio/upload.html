@@ -13,7 +13,7 @@
         <div class="modal-body">
 
           <div class="file-upload-wrapper">
-            <input type="file" name="file" class="file-upload" maxlength="100M"/>
+            <input type="file" name="file" class="file-upload" max="1"/>
             <input type="hidden" class="link"
               th:value="'/'+${ruta}+'/'" name="ruta"
               th:if="${ruta!=''}" />

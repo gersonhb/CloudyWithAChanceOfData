@@ -37,12 +37,16 @@ public class FileServiceImpl implements IFileService{
         Configuracion keyParam=configuracionService.findByParametro("KEY_FILE");
         Configuracion ivParam=configuracionService.findByParametro("IV_FILE");
         Integer bkFile=Integer.parseInt(configuracionService.findByParametro("BK_FILE").getValor());
+        Long size=configuracionService.tamanoFileUpload()*1024*1024;
 
         if(file.isEmpty())
             return "Selecciona un archivo a subir";
 
         if(keyParam.getValor().equals("0") || ivParam.getValor().equals("0"))
             return "Para subir archivos el administrador debe generar los archivos KEY y IV.";
+
+        if(file.getSize()>size)
+            return "El tamaño máximo establecido es "+configuracionService.tamanoFileUpload()+" MB";
 
         try {
             byte[] bytes=file.getBytes();
@@ -114,6 +118,7 @@ public class FileServiceImpl implements IFileService{
 
             }
         } catch (IOException e) {
+            System.out.println(e.getMessage());
             return "Error al subir archivo";
         }
         

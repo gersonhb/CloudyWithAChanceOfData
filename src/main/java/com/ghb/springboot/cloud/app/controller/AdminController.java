@@ -10,6 +10,7 @@ import com.ghb.springboot.cloud.app.entity.Usuario;
 import com.ghb.springboot.cloud.app.service.IUsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,8 +24,9 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("administrador/")
+@RequestMapping("/administrador")
 @SessionAttributes("usuario")
+@Secured(value = "ROLE_ADMINISTRADOR")
 public class AdminController {
     
     private IUsuarioService usuarioService;
@@ -32,6 +34,12 @@ public class AdminController {
     @Autowired    
     public AdminController(IUsuarioService usuarioService) {
         this.usuarioService = usuarioService;
+    }
+
+    @GetMapping({"/",""})
+    public String index()
+    {
+        return "redirect:/administrador/configuracion";
     }
 
     @GetMapping("/crearUsuario")
