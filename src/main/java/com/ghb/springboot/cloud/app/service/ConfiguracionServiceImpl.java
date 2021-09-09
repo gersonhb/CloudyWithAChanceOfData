@@ -12,6 +12,7 @@ import com.ghb.springboot.cloud.app.entity.Configuracion;
 import com.ghb.springboot.cloud.app.repository.IConfiguracionRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -25,6 +26,8 @@ public class ConfiguracionServiceImpl implements IConfiguracionService {
     @Autowired
     private CommonsMultipartResolver commonsMultipartResolver;
 
+    @Autowired
+    private TomcatServletWebServerFactory tomcatServletWebServerFactory;
 
     @Transactional
     @Override
@@ -39,7 +42,9 @@ public class ConfiguracionServiceImpl implements IConfiguracionService {
                     new Configuracion("KEY_FILE", "0"), 
                     new Configuracion("IV_FILE", "0"),
                     new Configuracion("BK_FILE","3"),
-                    new Configuracion("MAX_FILE_UPLOAD","5")));
+                    new Configuracion("MAX_FILE_UPLOAD","5"),
+                    new Configuracion("SESSION_TIMEOUT","15"),
+                    new Configuracion("PORT_SERVER","8080")));
 
             File directorio=null;
             String root="";
@@ -148,7 +153,8 @@ public class ConfiguracionServiceImpl implements IConfiguracionService {
 
     @Transactional
     @Override
-    public String guardarConfig(String root, String key, String iv, Integer cant, Integer size) {
+    public String guardarConfig(String root, String key, String iv, Integer cant,
+        Integer size, Integer time, Integer port) {
         
         List<Configuracion> configuraciones=configuracionRepository.findAll();
 
@@ -156,7 +162,9 @@ public class ConfiguracionServiceImpl implements IConfiguracionService {
             validarArchivosCifrado(key).get(1).equals("1") &&
             validarArchivosCifrado(iv).get(1).equals("1") && 
             cant >=1 && cant <=5 &&
-            size >=3 && size <=1024;
+            size >=3 && size <=10240 &&
+            time >=10 && time <=500 &&
+            port >=1024;
         
         if (validacion)
         {
@@ -165,16 +173,20 @@ public class ConfiguracionServiceImpl implements IConfiguracionService {
             Configuracion iv_dir = configuracionRepository.findByParametro(configuraciones.get(2).getParametro());
             Configuracion bk_cant = configuracionRepository.findByParametro(configuraciones.get(5).getParametro());
             Configuracion size_file = configuracionRepository.findByParametro(configuraciones.get(6).getParametro());
+            Configuracion timeout = configuracionRepository.findByParametro(configuraciones.get(7).getParametro());
+            Configuracion port_server = configuracionRepository.findByParametro(configuraciones.get(8).getParametro());
 
             root_dir.setValor(root);
             key_dir.setValor(key);
             iv_dir.setValor(iv);
             bk_cant.setValor(cant.toString());
+            timeout.setValor(time.toString());
 
             configuracionRepository.save(root_dir);
             configuracionRepository.save(key_dir);
             configuracionRepository.save(iv_dir);
             configuracionRepository.save(bk_cant);
+            configuracionRepository.save(timeout);
 
             if(size!=Integer.parseInt(size_file.getValor()))
             {
@@ -183,11 +195,17 @@ public class ConfiguracionServiceImpl implements IConfiguracionService {
                 commonsMultipartResolver.setMaxUploadSize(size*1024*1024);
             }
 
+            if(port!=Integer.parseInt(port_server.getValor()))
+            {
+                port_server.setValor(port.toString());
+                configuracionRepository.save(port_server);
+                tomcatServletWebServerFactory.setPort(port);
+            }
+
             return "Se actualizó los parámetros de configuración";
         }
         else
-            return "No se ha podido actualizar los cambios, valide que las rutas escogidas sean válidas, que la cantidad de backup esté entre "+
-            "1 y 5 y el tamaño max por archivo no sea mayor a 1GB";
+            return "No se ha podido actualizar los cambios, valide que las rutas escogidas sean válidas o los valores de los otros parametros";
             
     }
 

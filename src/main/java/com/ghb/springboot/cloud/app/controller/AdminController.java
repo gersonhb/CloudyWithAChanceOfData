@@ -2,15 +2,20 @@ package com.ghb.springboot.cloud.app.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.validation.Valid;
 
 import com.ghb.springboot.cloud.app.entity.Rol;
 import com.ghb.springboot.cloud.app.entity.Usuario;
+import com.ghb.springboot.cloud.app.service.IPaginacionService;
 import com.ghb.springboot.cloud.app.service.IUsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -26,14 +32,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/administrador")
 @SessionAttributes("usuario")
-@Secured(value = "ROLE_ADMINISTRADOR")
+@PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
 public class AdminController {
     
     private IUsuarioService usuarioService;
+    private IPaginacionService paginacionService;
 
     @Autowired    
-    public AdminController(IUsuarioService usuarioService) {
+    public AdminController(IUsuarioService usuarioService, IPaginacionService paginacionService) {
         this.usuarioService = usuarioService;
+        this.paginacionService = paginacionService;
     }
 
     @GetMapping({"/",""})
@@ -58,7 +66,7 @@ public class AdminController {
     {
         String titulo = (usuario.getId() != null) ? "Editar Usuario" : "Crear Usuario";
         String boton = (usuario.getId() != null) ? "Editar" : "Crear";
-        String mensajeFlash = (usuario.getId() != null) ? "Cliente editado con éxito!!!" : "Cliente creado con éxito!!!";
+        String mensajeFlash = (usuario.getId() != null) ? "Usuario editado con éxito" : "Usuario creado con éxito";
         
         if(usuario.getId() == null)
         {
@@ -89,9 +97,27 @@ public class AdminController {
     }
 
     @GetMapping("/listarUsuarios")
-    public String vistaListarUsuarios(Model model)
+    public String vistaListarUsuarios(@RequestParam(required = false) Integer page,Model model)
     {
+        int pagina = page!=null? (page-1):0;
+
+        PageRequest pageRequest = PageRequest.of(pagina, 10);
+        Page<Usuario> pageUsuario= paginacionService.getAllUsuarios(pageRequest);
+
+        int totalPage = pageUsuario.getTotalPages();
+        if(totalPage>0)
+        {
+            List<Integer> paginas = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("paginas", paginas);
+        }
+
         model.addAttribute("titulo", "Lista de Usuarios");
+        model.addAttribute("listaUsuarios", pageUsuario.getContent());
+        model.addAttribute("actual",pagina+1);
+        model.addAttribute("siguiente",pagina+2);
+        model.addAttribute("previo",pagina);
+        model.addAttribute("ultimo",totalPage);
+
         return "administrador/listarUsuarios";
     }
 

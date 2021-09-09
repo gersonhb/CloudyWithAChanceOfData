@@ -28,5 +28,4 @@ public class ValidacionController {
     {
         return configuracionService.validarArchivosCifrado(root);
     }
-
 }

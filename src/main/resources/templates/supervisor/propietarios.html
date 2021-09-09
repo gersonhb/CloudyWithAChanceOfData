@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/layout :: head"></head>
+
+<body>
+    <header th:replace="layout/layout :: header"></header>
+    <div class="container py-4">
+        <div class="card bg-light">
+            <div class="card-header">
+                <h3 th:text="${actualPag}"></h3>
+            </div>
+            <div class="card-body">
+                <div th:if="${!propietarios.isEmpty()}">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="col-1 td_col">ID</th>
+                                <th>Nombre</th>
+                                <th>Username</th>
+                                <th class="col-1 td_col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody th:each="propietario : ${propietarios}">
+                            <tr>
+                                <td class="col-1 td_col" style="font-weight: bold;"
+                                    th:text="${propietarios.lastIndexOf(propietario)+correlativo+1}"></td>
+                                <td th:text="${propietario.nombre+' '+propietario.apellidoPat+' '+propietario.apellidoMat}"></td>
+                                <td th:text="${propietario.username}"></td>
+                                <td class="col-1 td_col">
+                                    <form method="POST" th:action="@{/supervisor/eliminarPropietario}">
+                                        <input type="submit" class="btn btn-danger"
+                                            th:if="${propietario.username!=usuario}" th:value="'Eliminar'" onclick="confirmarEliminacionUsuarioRuta();"/>
+                                        <input type="hidden" th:value="${propietario.username}" name=username>
+                                        <input type="hidden" th:value="${dir}" name=ruta>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-md2"></div>
+                        <div class="col-md8">
+                            <nav aria-label="Pagination">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item" th:classappend="${previo==0 ? 'disabled' : '' }">
+                                        <a class="page-link" th:href="@{/supervisor/propietarios(page=${previo})}"
+                                            th:text="'Anterior'"></a>
+                                    </li>
+                                    <li class="page-item" th:each="p : ${paginas}"
+                                        th:classappend="${actual==p ? 'disabled' : '' }">
+                                        <a class="page-link" th:href="@{/supervisor/propietarios(page=${p})}" th:text="${p}"></a>
+                                    </li>
+                                    <li class="page-item" th:classappend="${actual==ultimo ? 'disabled' : '' }">
+                                        <a class="page-link" th:href="@{/supervisor/propietarios(page=${siguiente})}"
+                                            th:text="'Siguiente'"></a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <div class="col-md2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer th:replace="layout/layout :: footer"></footer>
+</body>
+
+</html>

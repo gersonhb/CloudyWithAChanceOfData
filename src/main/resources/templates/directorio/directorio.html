@@ -11,14 +11,11 @@
                 <div class="row g-3">
                     <div class="col-auto">
                         <input type="button" value="Subir archivo" class="btn btn-success border mb-3"
-                            data-bs-toggle="modal" data-bs-target="#uploadModal">
+                            data-bs-toggle="modal" data-bs-target="#uploadModal" th:if="${ruta!=''}">
                     </div>
                     <div class="col-auto">
                         <input type="button" value="Crear carpeta" class="mb-3 btn btn-success border"
-                            data-bs-toggle="modal" data-bs-target="#mkdirModal">
-                    </div>
-                    <div class="col-6">
-                        <input type="text" placeholder="Buscar archivo" class="offset-md-6 form-control">
+                            data-bs-toggle="modal" data-bs-target="#mkdirModal" th:if="${rol!='ROLE_USUARIO'}">
                     </div>
                 </div>
                 <div class="row my-1">
@@ -37,7 +34,8 @@
                             </tr>
                         </thead>
                         <tbody class="table-light">
-                            <tr th:each="dir : ${directorios}">
+                            <tr th:each="dir : ${directorios}"
+                                th:classappend="${dir.esDirectorio ? 'table-primary' : '' }">
                                 <td th:text="${dir.nombre}" th:if="${!dir.esDirectorio}"></td>
                                 <td th:if="${dir.esDirectorio}">
                                     <a th:href="@{/directorio/}+${#strings.replace(ruta,'/','+')}+'+'+${dir.nombre}"
@@ -50,21 +48,29 @@
                                 <td class="col-1 td_col" th:text="${dir.size}"></td>
                                 <td class="col-2 td_col" th:text="${dir.formatoFecha}"></td>
                                 <td class="col-2 td_col" th:if="${!dir.esDirectorio}">
-                                    <button class="col-1 btn btn-success btn-sm info" type="button"
-                                        data-bs-toggle="modal" data-bs-target="#bkArchivoModal">i</button>
-                                    <input type="hidden" class="link"
-                                        th:value="'/directorio/bkArchivo/'+${#strings.replace(ruta,'/','+')}+'='+${dir.nombre}"
-                                        th:if="${ruta!=''}" />
-                                    <input type="hidden" class="link" th:value="'/directorio/bkArchivo/'+${dir.nombre}"
-                                        th:if="${ruta==''}" />
-                                    <a th:href="@{/directorio/descarga/}+${#strings.replace(ruta,'/','+')}+'='+${dir.nombre}"
-                                        class="col-1 btn btn-primary btn-sm" download th:if="${ruta!=''}">V</a>
-                                    <a th:href="@{/directorio/descarga/}+${dir.nombre}"
-                                        class="col-1 btn btn-primary btn-sm" download th:if="${ruta==''}">V</a>
-                                    <a class="col-1 btn btn-danger btn-sm">X</a>
+                                    <div class="row">
+                                        <form method="POST" th:action="@{/directorio/borrar/}">
+                                        <button class="col btn btn-success btn-sm info" type="button"
+                                            data-bs-toggle="modal" data-bs-target="#bkArchivoModal">i</button>
+                                        <input type="hidden" class="link"
+                                            th:value="'/directorio/bkArchivo/'+${#strings.replace(ruta,'/','+')}+'='+${dir.nombre}"
+                                            th:if="${ruta!=''}" />
+                                        <input type="hidden" class="link"
+                                            th:value="'/directorio/bkArchivo/'+${dir.nombre}" th:if="${ruta==''}" />
+                                        <a th:href="@{/directorio/descarga/}+${#strings.replace(ruta,'/','+')}+'='+${dir.nombre}"
+                                            class="col btn btn-primary btn-sm" download th:if="${ruta!=''}">V</a>
+                                        <a th:href="@{/directorio/descarga/}+${dir.nombre}"
+                                            class="col btn btn-primary btn-sm" download th:if="${ruta==''}">V</a>
+                                        
+                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                th:if="${rol!='ROLE_USUARIO'}"
+                                                onclick="confirmarEliminacionArchivo();">X</button>
+                                            <input type="hidden" name="file" th:value="${dir.nombre}">
+                                            <input type="hidden" name="ruta" th:value="${ruta}">
+                                        </form>
+                                    </div>
                                 </td>
                                 <td class="col-2 td_col" th:if="${dir.esDirectorio}">
-                                    <input type="submit" value="X" name="borrar" class="col-1 btn btn-danger btn-sm">
                                 </td>
                             </tr>
                         </tbody>

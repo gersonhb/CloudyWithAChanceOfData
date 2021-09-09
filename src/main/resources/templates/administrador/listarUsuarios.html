@@ -11,7 +11,7 @@
                 <h3 th:text="${titulo}"></h3>
             </div>
             <div class="card-body">
-                <div>
+                <div th:if="${!listaUsuarios.isEmpty()}">
                     <table class="table table-striped table-bordered table-hover">
                         <thead class="table-dark">
                             <tr>
@@ -25,7 +25,7 @@
                                 <th>Fecha Creacion</th>
                             </tr>
                         </thead>
-                        <tbody th:each="usuario : ${usuarios}">
+                        <tbody th:each="usuario : ${listaUsuarios}">
                             <tr>
                                 <td>
                                     <a th:href="@{/administrador/crearUsuario/} + ${usuario.id}" th:text="${usuario.id}" class="btn btn-primary btn-xs"></a>
@@ -40,6 +40,25 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div class="row">
+                        <div class="col-md2"></div>
+                        <div class="col-md8">
+                            <nav aria-label="Pagination">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item" th:classappend="${previo==0 ? 'disabled' : '' }">
+                                        <a class="page-link" th:href="@{/administrador/listarUsuarios(page=${previo})}" th:text="'Anterior'"></a>
+                                    </li>
+                                    <li class="page-item" th:each="p : ${paginas}" th:classappend="${actual==p ? 'disabled' : '' }">
+                                        <a class="page-link" th:href="@{/administrador/listarUsuarios(page=${p})}" th:text="${p}"></a>
+                                    </li>
+                                    <li class="page-item" th:classappend="${actual==ultimo ? 'disabled' : '' }">
+                                        <a class="page-link" th:href="@{/administrador/listarUsuarios(page=${siguiente})}" th:text="'Siguiente'"></a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <div class="col-md2"></div>
+                    </div>
                 </div>
             </div>
         </div>

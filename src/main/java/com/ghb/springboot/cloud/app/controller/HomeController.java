@@ -22,7 +22,8 @@ public class HomeController {
     public String home(Model model, Principal principal)
     {
         Usuario usuario=usuarioService.findByUsername(principal.getName());
-        model.addAttribute("titulo", "Bienvenido "+ usuario.getNombre());
+        model.addAttribute("titulo", "Home");
+        model.addAttribute("banner", "Bienvenido "+ usuario.getNombre()+" "+usuario.getApellidoPat());
         return "index";
     }
 

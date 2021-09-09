@@ -63,3 +63,15 @@ function ValidarCifrado(idBtn, idAlerta) {
             }
         });
 }
+
+function confirmarEliminacionUsuarioRuta() {
+    confirm("¿Está seguro de eliminar al usuario?");
+}
+
+function confirmarEliminacionRuta() {
+    confirm("¿Está seguro de eliminar la ruta? Perderá todos los archivos que contenga.");
+}
+
+function confirmarEliminacionArchivo() {
+    confirm("¿Está seguro de eliminar el archivo? Perderá todos los backups correspondientes.");
+}

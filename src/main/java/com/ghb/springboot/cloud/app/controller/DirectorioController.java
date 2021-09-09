@@ -1,5 +1,8 @@
 package com.ghb.springboot.cloud.app.controller;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.Principal;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +14,8 @@ import com.ghb.springboot.cloud.app.service.IDirectorioService;
 import com.ghb.springboot.cloud.app.service.IFileService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,31 +46,44 @@ public class DirectorioController implements HandlerExceptionResolver{
     }
 
     @GetMapping({"/",""})
-    public String vistaDirectorio(Model model)
+    public String vistaDirectorio(Model model,Authentication authentication)
     {
         List<Archivo> directorios=directorioService.listarDirectorio("");
         
         model.addAttribute("titulo", "Directorio Compartido");
         model.addAttribute("directorios", directorios);
         model.addAttribute("ruta", "");
+        model.addAttribute("rol", authentication.getAuthorities().iterator().next().toString());
         
         return "directorio/directorio";
     }
 
     @PostMapping("/upload")
-    public String subirArchivo(@RequestParam MultipartFile file,RedirectAttributes flash,@RequestParam String ruta)
+    public String subirArchivo(@RequestParam MultipartFile file,RedirectAttributes flash,@RequestParam String ruta,
+    HttpServletRequest request)
     {
         flash.addFlashAttribute("info",fileService.subirArchivo(file,ruta));
-
-        return "redirect:/directorio";
+        try {
+            URL link=new URL(request.getHeader("Referer"));
+            return "redirect:"+link.getPath();
+        } catch (MalformedURLException e) {
+            return "redirect:/directorio";
+        }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR') or hasRole('ROLE_SUPERVISOR')")
     @PostMapping("/mkdir")
-    public String mkdir(@RequestParam String directorio,@RequestParam String ruta, RedirectAttributes flash)
+    public String mkdir(@RequestParam String directorio,@RequestParam String ruta, RedirectAttributes flash,
+    Principal principal,HttpServletRequest request)
     {
-        flash.addFlashAttribute("info", directorioService.mkdir(directorio,ruta));
-
-        return "redirect:/directorio";
+        
+        flash.addFlashAttribute("info", directorioService.mkdir(directorio,ruta,principal.getName()));
+        try {
+            URL link=new URL(request.getHeader("Referer"));
+            return "redirect:"+link.getPath();
+        } catch (MalformedURLException e) {
+            return "redirect:/directorio";
+        }
     }
 
     @GetMapping("/descarga/{file}")
@@ -103,14 +121,53 @@ public class DirectorioController implements HandlerExceptionResolver{
     }
 
     @GetMapping("/{dir}")
-    public String vistaSubDirectorio(@PathVariable String dir, Model model) {
+    public String vistaSubDirectorio(@PathVariable String dir, Model model,Authentication authentication,
+    HttpServletRequest request,RedirectAttributes flash) {
         
-        List<Archivo> directorios=directorioService.listarDirectorio(dir.replaceAll("\\+", "/"));
-        model.addAttribute("titulo", "Directorio Compartido");
-        model.addAttribute("directorios", directorios);
-        model.addAttribute("ruta", dir.replaceAll("\\+", "/"));
+        if(!authentication.getAuthorities().iterator().next().toString().equals("ROLE_ADMINISTRADOR"))
+        {
+            if(directorioService.accesoDirectorio(authentication.getName(), dir.replaceAll("\\+", "/")))
+            {
+                List<Archivo> directorios=directorioService.listarDirectorio(dir.replaceAll("\\+", "/"));
+                model.addAttribute("titulo", "Directorio Compartido");
+                model.addAttribute("directorios", directorios);
+                model.addAttribute("ruta", dir.replaceAll("\\+", "/"));
+                model.addAttribute("rol", authentication.getAuthorities().iterator().next().toString());
+                return "directorio/directorio";
+            }
+            else
+            {
+                model.addAttribute("titulo", "Directorio Compartido");
+                flash.addFlashAttribute("error", "No cuenta con acceso a la carpeta que intenta ingresar");
+                try {
+                    URL link=new URL(request.getHeader("Referer"));
+                    return "redirect:"+link.getPath();
+                } catch (MalformedURLException e) {
+                    return "redirect:/directorio";
+                }
+            }
+        }
+        else
+        {
+            List<Archivo> directorios=directorioService.listarDirectorio(dir.replaceAll("\\+", "/"));
+            model.addAttribute("titulo", "Directorio Compartido");
+            model.addAttribute("directorios", directorios);
+            model.addAttribute("ruta", dir.replaceAll("\\+", "/"));
+            model.addAttribute("rol", authentication.getAuthorities().iterator().next().toString());
+            return "directorio/directorio";
+        }
+    }
 
-        return "directorio/directorio";
+    @PostMapping("/borrar")
+    public String borrarArchivo(@RequestParam String file,@RequestParam String ruta,RedirectAttributes flash,HttpServletRequest request)
+    {
+        flash.addFlashAttribute("info", fileService.eliminarArchivo(ruta, file));
+        try {
+            URL link=new URL(request.getHeader("Referer"));
+            return "redirect:"+link.getPath();
+        } catch (MalformedURLException e) {
+            return "redirect:/directorio";
+        }
     }
 
     @Override

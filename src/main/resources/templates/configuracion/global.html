@@ -81,6 +81,21 @@
                                     <span>(MB) ingresar tamaño en MegaBytes</span>
                                 </td>
                             </tr>
+                            <tr>
+                                <td class="col-1"><b>Duración de la sesión</b></td>
+                                <td class="col-2">
+                                    <input type="number" placeholder="Timeout de sesión" style="width: 300px;" min="10"
+                                        max="500" th:value="${configuraciones[7].valor}" name="time">
+                                    <span>(minutos)</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-1"><b>Puerto de aplicativo</b></td>
+                                <td class="col-2">
+                                    <input type="number" placeholder="Puerto de servidor" style="width: 300px;"
+                                        min="1024" th:value="${configuraciones[8].valor}" name="port">
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                     <button type="submit" class="btn btn-primary"

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/layout :: head"></head>
+
+<body>
+    <header th:replace="layout/layout :: header"></header>
+    <div class="container py-4">
+        <div class="card bg-light">
+            <div class="card-header">
+                <h3 th:text="${titulo}"></h3>
+            </div>
+            <div class="card-body">
+                <div th:if="${rutas.isEmpty()}">
+                    <span>No cuenta con rutas creadas</span>
+                </div>
+                <div th:if="${!rutas.isEmpty()}">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="col-1 td_col">ID</th>
+                                <th>Ruta</th>
+                                <th class="col-1 td_col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody th:each="ruta : ${rutas}">
+                            <tr>
+                                <td class="col-1 td_col" style="font-weight: bold;"
+                                    th:text="${rutas.lastIndexOf(ruta)+correlativo+1}"></td>
+                                <td th:text="${ruta.nombre}"></td>
+                                <td class="col-1 td_col">
+                                    <a th:href="@{/supervisor/editarRutas/}+${#strings.replace(ruta.nombre,'/','+')}"
+                                        class="btn btn-primary">Editar</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-md2"></div>
+                        <div class="col-md8">
+                            <nav aria-label="Pagination">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item" th:classappend="${previo==0 ? 'disabled' : '' }">
+                                        <a class="page-link" th:href="@{/supervisor(page=${previo})}"
+                                            th:text="'Anterior'"></a>
+                                    </li>
+                                    <li class="page-item" th:each="p : ${paginas}"
+                                        th:classappend="${actual==p ? 'disabled' : '' }">
+                                        <a class="page-link" th:href="@{/supervisor(page=${p})}" th:text="${p}"></a>
+                                    </li>
+                                    <li class="page-item" th:classappend="${actual==ultimo ? 'disabled' : '' }">
+                                        <a class="page-link" th:href="@{/supervisor(page=${siguiente})}"
+                                            th:text="'Siguiente'"></a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <div class="col-md2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer th:replace="layout/layout :: footer"></footer>
+</body>
+
+</html>

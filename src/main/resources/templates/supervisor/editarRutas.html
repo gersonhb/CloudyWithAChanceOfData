@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/layout :: head"></head>
+
+<body>
+    <header th:replace="layout/layout :: header"></header>
+    <div class="container py-4">
+        <div class="card bg-light">
+            <div class="card-header">
+                <h3 th:text="${actualPag}"></h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-bordered table-hover">
+                    <tbody>
+                        <tr>
+                            <td class="col-1"><b>Ver Propietarios</b></td>
+                            <td class="col-1">
+                                <a th:href="@{/supervisor/propietarios/}+${ruta}" class="btn btn-primary">Ver</a>
+                                <button class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#agregarPropietario" type="button">Agregar
+                                    Usuario</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-1"><b>Ver Miembros</b></td>
+                            <td class="col-1">
+                                <a th:href="@{/supervisor/miembros/}+${ruta}" class="btn btn-primary">Ver</a>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarMiembro"
+                                    type="button">Agregar Usuario</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-1"><b>Eliminar Ruta</b></td>
+                            <td class="col-1">
+                                <form method="POST" th:action="@{/supervisor/eliminarRuta}">
+                                    <input type="submit" onclick="confirmarEliminacionRuta();" class="btn btn-danger"
+                                        th:value="'Eliminar Ruta'">
+                                    <input th:value="${ruta}" type="hidden" name=ruta>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div th:replace="supervisor/agregarPropietarioModal  :: agregarPropietario"></div>
+    <div th:replace="supervisor/agregarMiembroModal  :: agregarMiembro"></div>
+    <footer th:replace="layout/layout :: footer"></footer>
+</body>
+
+</html>

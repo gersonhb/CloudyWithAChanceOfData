@@ -13,6 +13,10 @@ import java.util.stream.Stream;
 
 import com.ghb.springboot.cloud.app.entity.Archivo;
 import com.ghb.springboot.cloud.app.entity.Configuracion;
+import com.ghb.springboot.cloud.app.entity.Ruta;
+import com.ghb.springboot.cloud.app.entity.Usuario;
+import com.ghb.springboot.cloud.app.repository.IRutaRepository;
+import com.ghb.springboot.cloud.app.repository.IUsuarioRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +26,12 @@ public class DirectorioServiceImpl implements IDirectorioService {
 
     @Autowired
     private IConfiguracionService configuracionService;
+
+    @Autowired
+    private IRutaRepository rutaRepository;
+    
+    @Autowired
+    private IUsuarioRepository usuarioRepository;
 
     @Override
     public List<Archivo> listarDirectorio(String dir){
@@ -108,7 +118,7 @@ public class DirectorioServiceImpl implements IDirectorioService {
 	}
 
 	@Override
-	public String mkdir(String directorio,String ruta) {
+	public String mkdir(String directorio,String ruta,String usuario) {
 		
         Configuracion configuracion=configuracionService.findByParametro("ROOT");
         Path d=Paths.get(configuracion.getValor()+ruta+directorio);
@@ -123,6 +133,8 @@ public class DirectorioServiceImpl implements IDirectorioService {
             {
                 try {
                     Files.createDirectory(d);
+                    List<Usuario> propietario_miembro=List.of(usuarioRepository.findByUsername(usuario));
+                    rutaRepository.save(new Ruta(ruta+directorio, propietario_miembro, propietario_miembro));
                     return "Se creó la carpeta "+directorio;
                 } catch (IOException e) {
                     return "Error al crear la carpeta "+directorio;
@@ -132,4 +144,16 @@ public class DirectorioServiceImpl implements IDirectorioService {
         else
             return "Nombre incorrecto, el nombre no puede empezar con número o caracter especial o espacio en blanco, tamaño máximo de nombre 16 caracteres";
 	}
+
+    @Override
+    public Boolean accesoDirectorio(String usuario, String ruta) {
+        
+        Ruta dir=rutaRepository.findMiembrosRuta("/"+ruta);
+        Usuario user=usuarioRepository.findByUsername(usuario);
+
+        if(dir.getMiembros().contains(user))
+            return true;
+        else
+            return false;
+    }
 }

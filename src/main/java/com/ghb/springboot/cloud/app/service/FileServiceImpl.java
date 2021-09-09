@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -123,61 +124,6 @@ public class FileServiceImpl implements IFileService{
         }
         
     }
-
-    /*@Override
-    public ResponseEntity<Object> descargasArchivo(String dir,String archivo) {
-        
-        Configuracion root=configuracionService.findByParametro("ROOT");
-        
-        if(System.getProperty("os.name").contains("Windows"))
-            dir=dir.replace("/", "\\");
-
-        ResponseEntity<Object> responseEntity=null;
-        try {
-            
-            cifradoService.desencriptar(root.getValor()+dir+archivo);
-            
-            //File file = new File(root.getValor()+dir+archivo+".unlock");
-            Path f=Paths.get(root.getValor()+dir+archivo+".unlock");
-            InputStreamResource resource= new InputStreamResource(new FileInputStream(f.toFile()));
-            //f.getFileSystem().close();
-            
-            HttpHeaders headers=new HttpHeaders();
-
-            headers.add("Content-Disposition", 
-            String.format("attachment; filename=\"%s\"", archivo));
-            headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
-            headers.add("Pragma", "no-cache");
-            headers.add("Expires", "0");
-
-            responseEntity=ResponseEntity.ok().headers(headers)
-            .contentLength(f.toFile().length())
-            .contentType(MediaType.parseMediaType("application/txt"))
-            .body(resource);
-            
-            f=null;
-            resource=null;
-            headers=null;
-            return responseEntity;
-            //Files.delete(Paths.get(root.getValor()+dir+archivo+".unlock"));
-            //Files.delete(Paths.get(root.getValor()+dir+archivo+".unlock"));
-            //Files.delete(Paths.get(root.getValor()+dir+archivo+".unlock"));
-
-        } catch (Exception e) {
-            return responseEntity;
-        }
-        finally
-        {
-            try {
-                responseEntity=null;
-                Files.delete(Paths.get(root.getValor()+dir+archivo+".unlock"));
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        
-    }*/
     
     @Override
     public void descargasArchivo(String dir,String archivo, HttpServletResponse response)
@@ -204,6 +150,40 @@ public class FileServiceImpl implements IFileService{
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    @Override
+    public String eliminarArchivo(String ruta, String archivo) {
+        Path file=Paths.get(configuracionService.findByParametro("ROOT").getValor()+"/"+ruta);
+        String[] parts = archivo.split("\\.");
+        Stream<Path> stream=null;
+        try {
+
+            stream=Files.list(file);
+            if(parts.length!=1)
+            {
+                stream
+                .filter(f->f.getFileName().toString().matches("^"+parts[0]+"_\\d\\."+parts[1]+"$"))
+                .map(Path::toFile)
+                .forEach(File::delete);
+            }
+            else
+            {
+                stream
+                .filter(f->f.getFileName().toString().matches("^"+archivo+"_\\d$"))
+                .map(Path::toFile)
+                .forEach(File::delete);
+            }
+            
+            stream.close();
+                
+            Files.delete(Paths.get(configuracionService.findByParametro("ROOT").getValor()+"/"+ruta+"/"+archivo));
+
+            return "Se eliminó el archivo "+archivo+" así como sus backups";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "No se ha podido eliminar el archivo "+archivo;
         }
     }
 }

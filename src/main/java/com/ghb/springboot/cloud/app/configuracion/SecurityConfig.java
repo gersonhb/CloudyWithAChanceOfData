@@ -12,12 +12,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
@@ -40,10 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         return provider;
     }
 
-    @Bean
+    /*@Bean
     public SessionRegistry sessionRegistry() {
         return new SessionRegistryImpl();
-    }
+    }*/
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -57,7 +55,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         .csrf().disable()
         .authorizeRequests()
         .antMatchers("/css/**","/js/**","/images/**","/h2-console/**").permitAll()
-        .antMatchers("/admin/**").hasAnyRole(Rol.ADMINISTRADOR.name())
+        .antMatchers("/administrador/**").hasRole(Rol.ADMINISTRADOR.name())
+        .antMatchers("/supervisor/**").hasAnyRole(Rol.ADMINISTRADOR.name(),Rol.SUPERVISOR.name())
         .anyRequest()
         .authenticated()
         .and()
@@ -72,16 +71,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
         http
         .sessionManagement()
-        //.invalidSessionUrl("/login?invalid-session=true")
-        .maximumSessions(1);
-        /*.sessionRegistry(sessionRegistry())
-        .expiredUrl("/login")
-        .maxSessionsPreventsLogin(true);*/
+        .maximumSessions(1)
+        .maxSessionsPreventsLogin(true)
+        .expiredUrl("/login?invalid-session=true");
+        //.sessionRegistry(sessionRegistry())
+        //.expiredUrl("/login")
+        //.maxSessionsPreventsLogin(true);
     }
 
     @Bean
     public HttpSessionEventPublisher httpSessionEventPublisher() {
-        return new HttpSessionEventPublisher();
+    return new HttpSessionEventPublisher();
     }
+
 
 }

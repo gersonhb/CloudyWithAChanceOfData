@@ -8,7 +8,7 @@ import com.ghb.springboot.cloud.app.service.ICifradoService;
 import com.ghb.springboot.cloud.app.service.IConfiguracionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 @RequestMapping("administrador/configuracion/global")
 @SessionAttributes("configuraciones")
-@Secured(value = "ROLE_ADMINISTRADOR")
+@PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
 public class ConfigController {
     
     private IConfiguracionService configuracionService;
@@ -66,9 +66,11 @@ public class ConfigController {
         @RequestParam String iv,
         @RequestParam Integer bkfile,
         @RequestParam Integer size,
+        @RequestParam Integer time,
+        @RequestParam Integer port,
         RedirectAttributes flash)
     {
-        flash.addFlashAttribute("info", configuracionService.guardarConfig(root,key,iv,bkfile,size));
+        flash.addFlashAttribute("info", configuracionService.guardarConfig(root,key,iv,bkfile,size,time,port));
         
         return "redirect:/administrador/configuracion/global";
     }

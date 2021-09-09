@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="agregarPropietario">
+  <div class="modal fade" id="agregarPropietario" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Propietario</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form method="POST" th:action="@{/supervisor/agregarPropietario}">
+          <div class="modal-body">
+            <input type="text" placeholder="Username" name="username" class="form-control">
+            <small class="text text-secondary font-italic">* Solo se puede agregar usuarios con perfil supervisor o administrador</small>
+            <input type="hidden" class="link"
+              th:value="${ruta}" name="ruta" />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-primary">Agregar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+</html>

@@ -8,4 +8,5 @@ public interface IFileService {
     
     public String subirArchivo(MultipartFile file,String ruta);
     public void descargasArchivo(String ruta,String archivo,HttpServletResponse response);
+    public String eliminarArchivo(String ruta,String archivo);
 }

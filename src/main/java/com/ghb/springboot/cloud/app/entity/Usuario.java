@@ -1,22 +1,27 @@
 package com.ghb.springboot.cloud.app.entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "usuarios")
-public class Usuario {
+public class Usuario implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "usuario_id")
     private Long id;
 
     @NotBlank
@@ -45,6 +50,12 @@ public class Usuario {
 
     private Boolean enabled;
     private LocalDate fechaCreacion;
+
+    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "propietarios")
+    private List<Ruta> propietarios;
+
+    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "miembros")
+    private List<Ruta> miembros;
 
     @PrePersist
     public void prePersist()
@@ -114,6 +125,22 @@ public class Usuario {
         this.rol = rol;
     }
 
+    public List<Ruta> getPropietarios() {
+        return propietarios;
+    }
+
+    public void setPropietarios(List<Ruta> propietarios) {
+        this.propietarios = propietarios;
+    }
+
+    public List<Ruta> getMiembros() {
+        return miembros;
+    }
+
+    public void setMiembros(List<Ruta> miembros) {
+        this.miembros = miembros;
+    }
+
     public Usuario() {
     }
 
@@ -144,11 +171,28 @@ public class Usuario {
         this.fechaCreacion = fechaCreacion;
     }
 
+    public Usuario(Long id, @NotBlank String nombre, @NotBlank String apellidoPat, @NotBlank String apellidoMat,
+            @NotBlank String username, @NotBlank String password, @NotBlank String rol, Boolean enabled,
+            LocalDate fechaCreacion, List<Ruta> propietarios, List<Ruta> miembros) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellidoPat = apellidoPat;
+        this.apellidoMat = apellidoMat;
+        this.username = username;
+        this.password = password;
+        this.rol = rol;
+        this.enabled = enabled;
+        this.fechaCreacion = fechaCreacion;
+        this.propietarios = propietarios;
+        this.miembros = miembros;
+    }
+
     @Override
     public String toString() {
         return "Usuario [apellidoMat=" + apellidoMat + ", apellidoPat=" + apellidoPat + ", enabled=" + enabled
-                + ", fechaCreacion=" + fechaCreacion + ", id=" + id + ", nombre=" + nombre + ", password=" + password
-                + ", rol=" + rol + ", username=" + username + "]";
+                + ", fechaCreacion=" + fechaCreacion + ", id=" + id + ", miembros=" + miembros + ", nombre=" + nombre
+                + ", password=" + password + ", propietarios=" + propietarios + ", rol=" + rol + ", username="
+                + username + "]";
     }
 
 }
