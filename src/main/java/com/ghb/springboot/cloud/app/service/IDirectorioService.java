@@ -10,5 +10,5 @@ public interface IDirectorioService {
     public List<Archivo> listarBkFile(String ruta,String archivo);
     public String mkdir(String directorio,String ruta,String usuario);
     public Boolean accesoDirectorio(String usuario,String ruta);
-    
+    public String rutaAnterior(String ruta);
 }

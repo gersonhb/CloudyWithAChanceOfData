@@ -133,6 +133,7 @@ public class DirectorioController implements HandlerExceptionResolver{
                 model.addAttribute("directorios", directorios);
                 model.addAttribute("ruta", dir.replaceAll("\\+", "/"));
                 model.addAttribute("rol", authentication.getAuthorities().iterator().next().toString());
+                model.addAttribute("rutaAnterior",directorioService.rutaAnterior(dir));
                 return "directorio/directorio";
             }
             else
@@ -154,6 +155,7 @@ public class DirectorioController implements HandlerExceptionResolver{
             model.addAttribute("directorios", directorios);
             model.addAttribute("ruta", dir.replaceAll("\\+", "/"));
             model.addAttribute("rol", authentication.getAuthorities().iterator().next().toString());
+            model.addAttribute("rutaAnterior",directorioService.rutaAnterior(dir));
             return "directorio/directorio";
         }
     }

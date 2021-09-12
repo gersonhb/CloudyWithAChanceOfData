@@ -29,11 +29,14 @@
                             <tr>
                                 <td class="col-1"><b>Root</b></td>
                                 <td class="col-2">
-                                    <input type="text" placeholder="Ruta" style="width: 300px;"
-                                        th:value="${configuraciones[0].valor}" name="root" id="valorRuta">
-                                    <button type="button" class="btn btn-primary" id="validarRuta"
-                                        onclick="ValidarRuta();">Validar ruta</button>
-                                    <span id="validacionRuta" class="text" style="margin-left: 8px;"></span>
+                                    <div class="row">
+                                        <input type="text" placeholder="Ruta" style="width: 500px; margin-left: 1.5%;"
+                                            class="form-control col-1" th:value="${configuraciones[0].valor}"
+                                            name="root" id="valorRuta">
+                                        <button type="button" class="btn btn-primary col-2" id="validarRuta"
+                                            onclick="ValidarRuta();" style="margin-left: 1%;">Validar ruta</button>
+                                        <span id="validacionRuta" class="text" style="margin-left: 1%;"></span>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
@@ -45,55 +48,66 @@
                             <tr>
                                 <td class="col-1"><b>Archivo KEY</b></td>
                                 <td class="col-2">
-                                    <input type="text" placeholder="Ruta" style="width: 300px;"
-                                        th:value="${configuraciones[1].valor}" name="key" id="valorKey">
-                                    <button type="button" class="btn btn-primary"
-                                        onclick="ValidarCifrado('valorKey','validacionKey');">Validar ruta</button>
-                                    <span id="validacionKey" class="text" style="margin-left: 8px;"></span>
-                                    <a th:href="@{/administrador/configuracion/global/key}" class="btn btn-primary"
-                                        th:if="${configuraciones[3].valor=='0'}">Generar KEY</a>
+                                    <div class="row">
+                                        <input type="text" placeholder="Ruta" style="width: 500px; margin-left: 1.5%;" class="form-control col-1"
+                                            th:value="${configuraciones[1].valor}" name="key" id="valorKey">
+                                        <button type="button" class="btn btn-primary col-2"
+                                            onclick="ValidarCifrado('valorKey','validacionKey');"
+                                            style="margin-left: 1%;">Validar ruta</button>
+                                        <span id="validacionKey" class="text" style="margin-left: 1%;"></span>
+                                        <a th:href="@{/administrador/configuracion/global/key}" class="btn btn-primary col-3"
+                                            th:if="${configuraciones[3].valor=='0'}" style="margin-left: 1%;">Generar
+                                            KEY</a>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-1"><b>Archivo IV</b></td>
                                 <td class="col-2">
-                                    <input type="text" placeholder="Ruta" style="width: 300px;"
+                                    <div class="row">
+                                    <input type="text" placeholder="Ruta" style="width: 500px; margin-left: 1.5%;" class="form-control col-1"
                                         th:value="${configuraciones[2].valor}" name="iv" id="valorIv">
-                                    <button type="button" class="btn btn-primary"
-                                        onclick="ValidarCifrado('valorIv','validacionIv');">Validar ruta</button>
-                                    <span id="validacionIv" class="text" style="margin-left: 8px;"></span>
-                                    <a th:href="@{/administrador/configuracion/global/iv}" class="btn btn-primary"
-                                        th:if="${configuraciones[4].valor=='0'}">Generar IV</a>
+                                    <button type="button" class="btn btn-primary col-2"
+                                        onclick="ValidarCifrado('valorIv','validacionIv');"
+                                        style="margin-left: 1%;">Validar ruta</button>
+                                    <span id="validacionIv" class="text" style="margin-left: 1%;"></span>
+                                    <a th:href="@{/administrador/configuracion/global/iv}" class="btn btn-primary col-3"
+                                        th:if="${configuraciones[4].valor=='0'}" style="margin-left: 1%;">Generar IV</a>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-1"><b>Número de backup por archivo</b></td>
                                 <td class="col-2">
                                     <input type="number" placeholder="Numero de backup" style="width: 300px;" min="1"
-                                        max="5" th:value="${configuraciones[5].valor}" name="bkfile">
+                                        max="5" th:value="${configuraciones[5].valor}" name="bkfile" class="form-control">
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-1"><b>Tamaño máximo para subir archivo</b></td>
                                 <td class="col-2">
-                                    <input type="number" placeholder="Numero de backup" style="width: 300px;" min="3"
-                                        max="1000" th:value="${configuraciones[6].valor}" name="size">
-                                    <span>(MB) ingresar tamaño en MegaBytes</span>
+                                    <div class="row">
+                                    <input type="number" placeholder="Numero de backup" style="width: 300px; margin-left: 1.5%;" min="3"
+                                        max="1000" th:value="${configuraciones[6].valor}" name="size" class="form-control col-1">
+                                    <span class="col-4">(MB) ingresar tamaño en MegaBytes</span>
+                                </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-1"><b>Duración de la sesión</b></td>
                                 <td class="col-2">
-                                    <input type="number" placeholder="Timeout de sesión" style="width: 300px;" min="10"
-                                        max="500" th:value="${configuraciones[7].valor}" name="time">
-                                    <span>(minutos)</span>
+                                    <div class="row">
+                                    <input type="number" placeholder="Timeout de sesión" style="width: 300px; margin-left: 1.5%;" min="10"
+                                        max="500" th:value="${configuraciones[7].valor}" name="time" class="form-control col-1">
+                                    <span class="col-2">(minutos)</span>
+                                </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-1"><b>Puerto de aplicativo</b></td>
                                 <td class="col-2">
                                     <input type="number" placeholder="Puerto de servidor" style="width: 300px;"
-                                        min="1024" th:value="${configuraciones[8].valor}" name="port">
+                                        min="1024" th:value="${configuraciones[8].valor}" name="port" class="form-control">
                                 </td>
                             </tr>
                         </tbody>

@@ -13,4 +13,5 @@ public interface IUsuarioService {
     public Usuario findOne(Long id);
     public Usuario findByUsername(String username);
     public void initUsuario();
+    public Boolean nombreUsuario(String username);
 }

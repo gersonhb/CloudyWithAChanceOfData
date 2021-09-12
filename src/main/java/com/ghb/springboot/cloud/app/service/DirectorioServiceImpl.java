@@ -156,4 +156,22 @@ public class DirectorioServiceImpl implements IDirectorioService {
         else
             return false;
     }
+
+    @Override
+    public String rutaAnterior(String ruta) {
+        String[] parts=ruta.split("\\+");
+        String rutaAnterior="";
+        if(parts.length==1)
+            return rutaAnterior;
+        else
+        {
+            for(int i=0;i<=parts.length-2;i++)
+            {
+                rutaAnterior+=parts[i]+"+";
+            }
+            rutaAnterior=rutaAnterior.substring(0, rutaAnterior.length()-1);
+
+            return rutaAnterior;
+        }
+    }
 }

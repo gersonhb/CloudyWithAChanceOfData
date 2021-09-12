@@ -19,8 +19,8 @@
                     </div>
                 </div>
                 <div class="row my-1">
-                    <input type="submit" value="<-" class="col-1 btn btn-outline-primary border btn-sm"
-                        th:if="${ruta!=''}" onClick="history.go(-1);">
+                    <a th:href="@{/directorio/}+${rutaAnterior}" class="col-1 btn btn-outline-primary border btn-sm"
+                        th:if="${ruta!=''}"><-</a>
                     <span class="col ruta">Ruta: <span th:text="'/'+${ruta}" id="ruta"></span></span>
                 </div>
                 <div class="row my-1">

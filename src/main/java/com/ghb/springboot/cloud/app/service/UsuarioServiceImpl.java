@@ -42,13 +42,9 @@ public class UsuarioServiceImpl implements IUsuarioService{
     @Transactional
     @Override
     public void cambiarPassword(String username, String password) {
-        
-        if(password!="")
-        {
-            Usuario usuario=usuarioRepository.findByUsername(username);
-            usuario.setPassword(passwordEncoder.encode(password));
-            usuarioRepository.save(usuario);
-        }
+        Usuario usuario=usuarioRepository.findByUsername(username);
+        usuario.setPassword(passwordEncoder.encode(password));
+        usuarioRepository.save(usuario);
     }
 
     @Transactional
@@ -99,8 +95,17 @@ public class UsuarioServiceImpl implements IUsuarioService{
                 )
             );
         }
-        
     }
 
-    
+    @Transactional(readOnly = true)
+    @Override
+    public Boolean nombreUsuario(String username) {
+        Usuario usuario=usuarioRepository.findByUsername(username);
+        if(usuario!=null)
+            return true;
+        else
+            return false;
+
+    }
+
 }

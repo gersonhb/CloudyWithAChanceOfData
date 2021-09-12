@@ -14,6 +14,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "usuarios")
@@ -25,22 +26,26 @@ public class Usuario implements Serializable{
     private Long id;
 
     @NotBlank
+    @Pattern(regexp = "^[a-zA-Z][ a-zA-Z]{5,20}")
     @Column(nullable = false)
     private String nombre;
 
     @NotBlank
+    @Pattern(regexp = "^[a-zA-Z][ a-zA-Z]{5,20}")
     @Column(name = "apellido_paterno",nullable = false)
     private String apellidoPat;
 
     @NotBlank
+    @Pattern(regexp = "^[a-zA-Z][ a-zA-Z]{5,20}")
     @Column(name = "apellido_materno",nullable = false)
     private String apellidoMat;
 
     @NotBlank
+    @Pattern(regexp = "[a-zA-Z\\d]{5,15}")
     @Column(nullable = false,unique = true)
     private String username;
 
-    @NotBlank
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=])(?=\\S+$).{8,20}$")
     @Column(nullable = false)
     private String password;
 

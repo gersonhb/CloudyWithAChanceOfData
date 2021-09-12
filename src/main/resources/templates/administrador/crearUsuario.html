@@ -18,10 +18,9 @@
                                 <td class="col-1"><b><label for="nombre">Nombre:</label></b></td>
                                 <td class="col-2">
                                     <div>
-                                        <input th:if="${usuario.id!=null}" disabled type="text" id="nombre"
-                                            th:field="*{nombre}">
+                                        <span th:if="${usuario.id!=null}" id="nombre" th:text="*{nombre}"></span>
                                         <input th:if="${usuario.id==null}" type="text" id="nombre" th:field="*{nombre}"
-                                            placeholder="Nombre">
+                                            placeholder="Nombre" class="form-control" style="width: 200px;" th:errorclass="'form-control alert-danger'">
                                         <small th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"
                                             class="field-validation-valid text-danger"></small>
                                     </div>
@@ -31,10 +30,12 @@
                                 <td class="col-1"><b><label for="apellidoPat">Apellido Paterno:</label></b></td>
                                 <td class="col-2">
                                     <div>
-                                        <input th:if="${usuario.id!=null}" disabled type="text" id="apellidoPat"
-                                            th:field="*{apellidoPat}">
+                                        <span th:if="${usuario.id!=null}" id="apellidoPat"
+                                            th:text="*{apellidoPat}"></span>
                                         <input th:if="${usuario.id==null}" type="text" id="apellidoPat"
-                                            th:field="*{apellidoPat}" placeholder="Apellido Paterno">
+                                            th:field="*{apellidoPat}" placeholder="Apellido Paterno"
+                                            class="form-control" style="width: 200px;"
+                                            th:errorclass="'form-control alert-danger'">
                                         <small th:if="${#fields.hasErrors('apellidoPat')}" th:errors="*{apellidoPat}"
                                             class="field-validation-valid text-danger"></small>
                                     </div>
@@ -44,10 +45,12 @@
                                 <td class="col-1"><b><label for="apellidoMat">Apellido Materno:</label></b></td>
                                 <td class="col-2">
                                     <div>
-                                        <input th:if="${usuario.id!=null}" disabled type="text" id="apellidoMat"
-                                            th:field="*{apellidoMat}">
+                                        <span th:if="${usuario.id!=null}" id="apellidoMat"
+                                            th:text="*{apellidoMat}"></span>
                                         <input th:if="${usuario.id==null}" type="text" id="apellidoMat"
-                                            th:field="*{apellidoMat}" placeholder="Apellido Materno">
+                                            th:field="*{apellidoMat}" placeholder="Apellido Materno"
+                                            class="form-control" style="width: 200px;"
+                                            th:errorclass="'form-control alert-danger'">
                                         <small th:if="${#fields.hasErrors('apellidoMat')}" th:errors="*{apellidoMat}"
                                             class="field-validation-valid text-danger"></small>
                                     </div>
@@ -57,10 +60,10 @@
                                 <td class="col-1"><b><label for="username">Usuario:</label></b></td>
                                 <td class="col-2">
                                     <div>
-                                        <input th:if="${usuario.id!=null}" type="text" id="username"
-                                            th:field="*{username}" disabled>
+                                        <span th:if="${usuario.id!=null}" id="username" th:text="*{username}"></span>
                                         <input th:if="${usuario.id==null}" type="text" id="username"
-                                            th:field="*{username}" placeholder="Nombre de usuario">
+                                            th:field="*{username}" placeholder="Nombre de usuario" class="form-control"
+                                            style="width: 200px;" th:errorclass="'form-control alert-danger'">
                                         <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
                                             class="field-validation-valid text-danger"></small>
                                     </div>
@@ -71,7 +74,8 @@
                                 <td class="col-2">
                                     <div>
                                         <input type="password" id="password" th:field="*{password}"
-                                            placeholder="Contraseña" style="width: 180px;">
+                                            placeholder="Contraseña" class="form-control" style="width: 200px;"
+                                            th:errorclass="'form-control alert-danger'">
                                         <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
                                             class="field-validation-valid text-danger"></small>
                                     </div>
@@ -81,7 +85,7 @@
                                 <td class="col-1"><b>Rol:</b></td>
                                 <td class="col-2">
                                     <div>
-                                        <select th:field="*{rol}" id="rol">
+                                        <select th:field="*{rol}" id="rol" class="custom-select" th:errorclass="'custom-select alert-danger'">
                                             <option value="" th:text="'--Seleccione Rol--'"></option>
                                             <option th:each="r : ${roles}" th:value="${r}" th:text="${r}">
                                             </option>
@@ -95,8 +99,8 @@
                                 <td class="col-1"><b><label for="enabled">Estado:</label></b></td>
                                 <td class="col-2">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="enabled" checked
-                                            th:value="*{enabled}" th:field="*{enabled}">
+                                        <input class="form-check-input position-static" type="checkbox" value=""
+                                            id="enabled" checked th:value="*{enabled}" th:field="*{enabled}">
                                         <label class="form-check-label" for="enabled">
                                             Habilitar
                                         </label>

@@ -34,20 +34,18 @@
                             <td class="col-2" th:text="*{#strings.substring(rol,5)}"></td>
                         </tr>
                         <tr>
-                            <form method="POST" th:action="@{/usuario/infoUsuario}">
-                                <td class="col-1"><b>Contraseña:</b></td>
-                                <td class="col-2"><input type="password" name="password" placeholder="Contraseña"
-                                        style="width: 150px;">
-                                    <button type="submit" class="btn btn-success">Cambiar</button>
-                                </td>
-                            </form>
+                            <td class="col-1"><b>Contraseña:</b></td>
+                            <td class="col-2">
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                    data-bs-target="#cambioPass">Cambiar Contraseña</button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
-
             </div>
         </div>
     </div>
+    <div th:replace="usuario/cambioPassModal :: cambioPass"></div>
     <footer th:replace="layout/layout :: footer"></footer>
 </body>
 

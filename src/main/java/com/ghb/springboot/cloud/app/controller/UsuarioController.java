@@ -21,7 +21,7 @@ public class UsuarioController {
     @Autowired
     private IUsuarioService usuarioService;
 
-    @GetMapping("/infoUsuario")
+    @GetMapping({"/infoUsuario","","/"})
     public String infoUsuario(Model model, Principal principal)
     {
         Usuario usuario=usuarioService.findByUsername(principal.getName());
@@ -32,15 +32,18 @@ public class UsuarioController {
         return "usuario/infoUsuario";
     }
 
-    @PostMapping("/infoUsuario")
-    public String cambiarPassword(@RequestParam String password ,Model model, Principal principal,
-    RedirectAttributes flash)
+    @PostMapping("/cambioPass")
+    public String cambiarPassword(@RequestParam String password, Principal principal, RedirectAttributes flash)
     {
-        model.addAttribute("password", password);
-        usuarioService.cambiarPassword(principal.getName(), password);
-        
-        flash.addFlashAttribute("success", "Se cambió contraseña con éxito");
+        if(password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=])(?=\\S+$).{8,20}$"))
+        {
+            usuarioService.cambiarPassword(principal.getName(), password);
+            flash.addFlashAttribute("success", "Se cambió contraseña con éxito");
+            return "redirect:/usuario/infoUsuario";
+        }
 
-        return "redirect:/";
+        flash.addFlashAttribute("error", "La contraseña debe tener un tamaño mínimo 8 caracteres y contener al menos una minúscula, mayúscula, dígito "+
+            "y caracter especial (!@#$%^&+=)");
+        return "redirect:/usuario/infoUsuario";
     }
 }

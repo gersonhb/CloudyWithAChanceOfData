@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
 
 import javax.validation.Valid;
 
+import com.ghb.springboot.cloud.app.Validacion.UsuarioValidador;
 import com.ghb.springboot.cloud.app.entity.Rol;
 import com.ghb.springboot.cloud.app.entity.Usuario;
 import com.ghb.springboot.cloud.app.service.IPaginacionService;
@@ -37,11 +38,13 @@ public class AdminController {
     
     private IUsuarioService usuarioService;
     private IPaginacionService paginacionService;
+    private UsuarioValidador validador;
 
     @Autowired    
-    public AdminController(IUsuarioService usuarioService, IPaginacionService paginacionService) {
+    public AdminController(IUsuarioService usuarioService, IPaginacionService paginacionService,UsuarioValidador validador) {
         this.usuarioService = usuarioService;
         this.paginacionService = paginacionService;
+        this.validador = validador;
     }
 
     @GetMapping({"/",""})
@@ -70,24 +73,42 @@ public class AdminController {
         
         if(usuario.getId() == null)
         {
+            validador.validate(usuario, result);
             if(result.hasErrors())
             {
-            model.addAttribute("titulo", titulo);
-            model.addAttribute("boton", boton);
-            model.addAttribute("usuario", usuario);
-            return "administrador/crearUsuario";
+                model.addAttribute("titulo", titulo);
+                model.addAttribute("boton", boton);
+                model.addAttribute("usuario", usuario);
+                return "administrador/crearUsuario";
             }
-            
+
             usuarioService.crearUsuario(usuario);
         }
         else
         {
-            
-            usuarioService.editarUsuario(
-                usuario.getId() ,  
-                usuario.getPassword(),  
-                usuario.getEnabled(), 
-                "ROLE_"+usuario.getRol());
+            if(usuario.getPassword().isEmpty())
+            {
+                usuarioService.editarUsuario(
+                    usuario.getId() ,  
+                    usuario.getPassword(),  
+                    usuario.getEnabled(), 
+                    "ROLE_"+usuario.getRol());
+            }
+            else
+            {
+                if(result.hasErrors())
+                {
+                    model.addAttribute("titulo", titulo);
+                    model.addAttribute("boton", boton);
+                    model.addAttribute("usuario", usuario);
+                    return "administrador/crearUsuario";
+                }
+                usuarioService.editarUsuario(
+                    usuario.getId() ,  
+                    usuario.getPassword(),  
+                    usuario.getEnabled(), 
+                    "ROLE_"+usuario.getRol());
+            }
         }
         
         status.setComplete();
