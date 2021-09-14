@@ -23,7 +23,7 @@ public class UsuarioValidador implements Validator{
     public void validate(Object target, Errors errors) {
         Usuario usuario=(Usuario)target;
         
-        if(!usuarioService.nombreUsuario(usuario.getNombre()))
+        if(usuarioService.nombreUsuario(usuario.getUsername()))
         {
             errors.rejectValue("username", "UsernameUsuario.usuario.username");
         }

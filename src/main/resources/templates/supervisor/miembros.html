@@ -30,7 +30,7 @@
                                 <td class="col-1 td_col">
                                     <form method="POST" th:action="@{/supervisor/eliminarMiembro}">
                                         <input type="submit" class="btn btn-danger"
-                                            th:if="${miembro.username!=usuario}" th:value="'Eliminar'" onclick="confirmarEliminacionUsuarioRuta();"/>
+                                            th:if="${miembro.username!=usuario}" th:value="'Eliminar'" onclick="confirmarEliminacionUsuarioRuta();">
                                         <input type="hidden" th:value="${miembro.username}" name=username>
                                         <input type="hidden" th:value="${dir}" name=ruta>
                                     </form>
@@ -44,16 +44,16 @@
                             <nav aria-label="Pagination">
                                 <ul class="pagination justify-content-center">
                                     <li class="page-item" th:classappend="${previo==0 ? 'disabled' : '' }">
-                                        <a class="page-link" th:href="@{/supervisor/miembros(page=${previo})}"
+                                        <a class="page-link" th:href="@{'/supervisor/miembros/'+${dir}(page=${previo})}"
                                             th:text="'Anterior'"></a>
                                     </li>
                                     <li class="page-item" th:each="p : ${paginas}"
                                         th:classappend="${actual==p ? 'disabled' : '' }">
-                                        <a class="page-link" th:href="@{/supervisor/miembros(page=${p})}"
+                                        <a class="page-link" th:href="@{'/supervisor/miembros/'+${dir}(page=${p})}"
                                             th:text="${p}"></a>
                                     </li>
                                     <li class="page-item" th:classappend="${actual==ultimo ? 'disabled' : '' }">
-                                        <a class="page-link" th:href="@{/supervisor/miembros(page=${siguiente})}"
+                                        <a class="page-link" th:href="@{'/supervisor/miembros/'+${dir}(page=${siguiente})}"
                                             th:text="'Siguiente'"></a>
                                     </li>
                                 </ul>

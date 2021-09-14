@@ -109,6 +109,7 @@ public class SupervisorController {
         model.addAttribute("ultimo",totalPage);
         model.addAttribute("correlativo", pagina*10);
         model.addAttribute("usuario", principal.getName());
+        model.addAttribute("dir", dir);
 
         return "supervisor/propietarios";
     }
@@ -140,6 +141,7 @@ public class SupervisorController {
         model.addAttribute("ultimo",totalPage);
         model.addAttribute("correlativo", pagina*10);
         model.addAttribute("usuario", principal.getName());
+        model.addAttribute("dir", dir);
 
         return "supervisor/miembros";
     }
