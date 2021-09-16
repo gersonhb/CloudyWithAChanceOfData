@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -28,6 +29,8 @@ public class Ruta implements Serializable{
     @Column(nullable = false,unique = true)
     private String nombre;
 
+    private Integer nivel;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "ruta_usuario_propietario",
     joinColumns = @JoinColumn(name = "ruta_id"),
@@ -40,6 +43,12 @@ public class Ruta implements Serializable{
     inverseJoinColumns = @JoinColumn(referencedColumnName = "usuario_id"))
     private List<Usuario> miembros;
     
+    @PrePersist
+    public void prePersist()
+    {
+        this.nivel=this.nombre.split("/").length-1;
+    }
+
     public Ruta() {
     }
 
@@ -49,9 +58,17 @@ public class Ruta implements Serializable{
         this.miembros = miembros;
     }
 
-    public Ruta(Long id, @NotBlank String nombre, List<Usuario> propietarios, List<Usuario> miembros) {
+    public Ruta(@NotBlank String nombre, Integer nivel, List<Usuario> propietarios, List<Usuario> miembros) {
+        this.nombre = nombre;
+        this.nivel = nivel;
+        this.propietarios = propietarios;
+        this.miembros = miembros;
+    }
+
+    public Ruta(Long id, @NotBlank String nombre, Integer nivel, List<Usuario> propietarios, List<Usuario> miembros) {
         this.id = id;
         this.nombre = nombre;
+        this.nivel = nivel;
         this.propietarios = propietarios;
         this.miembros = miembros;
     }
@@ -70,6 +87,14 @@ public class Ruta implements Serializable{
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public Integer getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(Integer nivel) {
+        this.nivel = nivel;
     }
 
     public List<Usuario> getPropietarios() {

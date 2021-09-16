@@ -18,14 +18,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class RutaServiceImpl implements IRutaService{
 
-    @Autowired
     private IUsuarioRepository usuarioRepository;
-
-    @Autowired
     private IRutaRepository rutaRepository;
+    private IConfiguracionService configuracionService;
 
     @Autowired
-    private IConfiguracionService configuracionService;
+    public RutaServiceImpl(IUsuarioRepository usuarioRepository, IRutaRepository rutaRepository,
+            IConfiguracionService configuracionService) {
+        this.usuarioRepository = usuarioRepository;
+        this.rutaRepository = rutaRepository;
+        this.configuracionService = configuracionService;
+    }
 
     @Override
     public String agregarPropietarioRuta(String username,String dir) {
@@ -41,7 +44,7 @@ public class RutaServiceImpl implements IRutaService{
                 return "El usuario ya es propietario de esta ruta. No puedes volver a agregarlo";
 
             ruta.agregarPropietario(usuario);
-            ruta.agregarMiembro(usuario);
+            permisoRutaAnterior(ruta, usuario);
             rutaRepository.save(ruta);
 
             return "Se agregó un nuevo propietario.";
@@ -59,10 +62,9 @@ public class RutaServiceImpl implements IRutaService{
 
         Ruta ruta=rutaRepository.findByNombre(dir);
         if(ruta.getMiembros().contains(usuario))
-                return "El usuario ya es miembro de esta ruta. No puedes volver a agregarlo";
+            return "El usuario ya es miembro de esta ruta. No puedes volver a agregarlo";
 
-        ruta.agregarMiembro(usuario);
-        rutaRepository.save(ruta);
+        permisoRutaAnterior(ruta, usuario);
 
         return "Se agregó un nuevo miembro";
     }
@@ -75,19 +77,28 @@ public class RutaServiceImpl implements IRutaService{
         ruta.borrarPropietario(usuario);
         rutaRepository.save(ruta);
 
-        return "El usuario "+usuario.getUsername()+" se eliminó como propietario de la ruta.";
+        return "El usuario "+usuario.getUsername()+" fue eliminado como propietario de la ruta.";
     }
 
     @Override
     public String eliminarMiembroRuta(String username, String dir) {
         Usuario usuario=usuarioRepository.findByUsername(username);
         Ruta ruta=rutaRepository.findByNombre(dir);
+        String separador= System.getProperty("os.name").contains("Windows")?"\\":"/";
 
         ruta.borrarPropietario(usuario);
         ruta.borrarMiembro(usuario);
         rutaRepository.save(ruta);
 
-        return "El usuario "+usuario.getUsername()+" se eliminó como miembro de la ruta.";
+        rutaRepository.findByNombreStartsWith(ruta.getNombre()+separador).forEach(r->
+        {
+            r.borrarPropietario(usuario);
+            r.borrarMiembro(usuario);
+            rutaRepository.save(r);
+        });
+        
+
+        return "El usuario "+usuario.getUsername()+" fue eliminado como miembro de la ruta.";
     }
 
     @Override
@@ -111,7 +122,56 @@ public class RutaServiceImpl implements IRutaService{
             return "Ha ocurrido un error al intentar eliminar la ruta, favor intentarlo más tarde";
         }
 
+    }
+
+    @Override
+    public int permisoRutaAnterior(Ruta ruta,Usuario usuario) {
         
+        if(ruta.getNivel()==1)
+        {
+            if(!ruta.getMiembros().contains(usuario))
+            {
+                ruta.agregarMiembro(usuario);
+                rutaRepository.save(ruta);
+            }
+            return 0;
+        }
+        else
+        {
+            if(!ruta.getMiembros().contains(usuario))
+            {
+                ruta.agregarMiembro(usuario);
+                rutaRepository.save(ruta);
+            }
+            String rutaAnt=rutaAnterior(ruta);
+            Ruta ra=rutaRepository.findByNombre(rutaAnt);
+            return permisoRutaAnterior(ra,usuario);
+        }
+    }
+
+    @Override
+    public String rutaAnterior(Ruta ruta) {
+        String[] parts=ruta.getNombre().split("/");
+        String rutaAnterior="";
+        if(parts.length==1)
+            return rutaAnterior;
+        else
+        {
+            for(int i=0;i<=parts.length-2;i++)
+            {
+                rutaAnterior+=parts[i]+"/";
+            }
+            rutaAnterior=rutaAnterior.substring(0, rutaAnterior.length()-1);
+
+            return rutaAnterior;
+        }
+    }
+
+    @Override
+    public Boolean soyPropietario(String ruta,String usuario) {
+        Ruta r=rutaRepository.findByNombre(ruta);
+        Usuario u=usuarioRepository.findByUsername(usuario);
+        return r.getPropietarios().contains(u);
     }
     
 }

@@ -34,7 +34,7 @@
                             <td class="col-1"><b>Eliminar Ruta</b></td>
                             <td class="col-1">
                                 <form method="POST" th:action="@{/supervisor/eliminarRuta}">
-                                    <input type="submit" onclick="confirmarEliminacionRuta();" class="btn btn-danger"
+                                    <input type="submit" onclick="return confirmarEliminacionRuta();" class="btn btn-danger"
                                         th:value="'Eliminar Ruta'">
                                     <input th:value="${ruta}" type="hidden" name=ruta>
                                 </form>

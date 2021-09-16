@@ -15,7 +15,11 @@
                     </div>
                     <div class="col-auto">
                         <input type="button" value="Crear carpeta" class="mb-3 btn btn-success border"
-                            data-bs-toggle="modal" data-bs-target="#mkdirModal" th:if="${rol!='ROLE_USUARIO'}">
+                            data-bs-toggle="modal" data-bs-target="#mkdirModal"
+                            th:if="${rol=='ROLE_ADMINISTRADOR' and ruta==''}">
+                        <input type="button" value="Crear carpeta" class="mb-3 btn btn-success border"
+                            data-bs-toggle="modal" data-bs-target="#mkdirModal" 
+                            th:if="${rol!='ROLE_ADMINISTRADOR' and ruta!='' and propietario}">
                     </div>
                 </div>
                 <div class="row my-1">
@@ -63,8 +67,11 @@
                                             class="col btn btn-primary btn-sm" download th:if="${ruta==''}">V</a>
                                         
                                             <button type="submit" class="btn btn-danger btn-sm"
-                                                th:if="${rol!='ROLE_USUARIO'}"
-                                                onclick="confirmarEliminacionArchivo();">X</button>
+                                                th:if="${rol=='ROLE_SUPERVISOR' and propietario}"
+                                                onclick="return confirmarEliminacionArchivo();">X</button>
+                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                th:if="${rol=='ROLE_ADMINISTRADOR'}"
+                                                onclick="return confirmarEliminacionArchivo();">X</button>
                                             <input type="hidden" name="file" th:value="${dir.nombre}">
                                             <input type="hidden" name="ruta" th:value="${ruta}">
                                         </form>

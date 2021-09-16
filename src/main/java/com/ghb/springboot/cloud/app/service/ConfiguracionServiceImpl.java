@@ -157,48 +157,74 @@ public class ConfiguracionServiceImpl implements IConfiguracionService {
         Integer size, Integer time, Integer port) {
         
         List<Configuracion> configuraciones=configuracionRepository.findAll();
+        String size_db=configuracionRepository.findByParametro(configuraciones.get(6).getParametro()).getValor();
+        String port_db=configuracionRepository.findByParametro(configuraciones.get(8).getParametro()).getValor();
+        Boolean validacion=null;
 
-        Boolean validacion = validarRuta(root).get(1).equals("1") &&
-            validarArchivosCifrado(key).get(1).equals("1") &&
-            validarArchivosCifrado(iv).get(1).equals("1") && 
-            cant >=1 && cant <=5 &&
-            size >=3 && size <=10240 &&
-            time >=10 && time <=500 &&
-            port >=1024;
+        if(key.length()>0 && iv.length()>0)
+        {
+            validacion = validarRuta(root).get(1).equals("1") && root.length()>0 &&
+                validarArchivosCifrado(key).get(1).equals("1") &&
+                validarArchivosCifrado(iv).get(1).equals("1") && 
+                cant >=1 && cant <=5 &&
+                size >=3 && size <=10240 &&
+                time >=10 && time <=500 &&
+                port >=1024;
+        }
+        else if(key.length()==0 && iv.length()==0)
+        {
+            validacion = validarRuta(root).get(1).equals("1") && root.length()>0 &&
+                cant >=1 && cant <=5 &&
+                size >=3 && size <=10240 &&
+                time >=10 && time <=500 &&
+                port >=1024;
+        }
+        else if(key.length()==0)
+        {
+            validacion = validarRuta(root).get(1).equals("1") && root.length()>0 &&
+                validarArchivosCifrado(iv).get(1).equals("1") && 
+                cant >=1 && cant <=5 &&
+                size >=3 && size <=10240 &&
+                time >=10 && time <=500 &&
+                port >=1024;
+        }
+        else
+        {
+            validacion = validarRuta(root).get(1).equals("1") && root.length()>0 &&
+                validarArchivosCifrado(key).get(1).equals("1") &&
+                cant >=1 && cant <=5 &&
+                size >=3 && size <=10240 &&
+                time >=10 && time <=500 &&
+                port >=1024;
+        }
         
         if (validacion)
         {
-            Configuracion root_dir = configuracionRepository.findByParametro(configuraciones.get(0).getParametro());
-            Configuracion key_dir = configuracionRepository.findByParametro(configuraciones.get(1).getParametro());
-            Configuracion iv_dir = configuracionRepository.findByParametro(configuraciones.get(2).getParametro());
-            Configuracion bk_cant = configuracionRepository.findByParametro(configuraciones.get(5).getParametro());
-            Configuracion size_file = configuracionRepository.findByParametro(configuraciones.get(6).getParametro());
-            Configuracion timeout = configuracionRepository.findByParametro(configuraciones.get(7).getParametro());
-            Configuracion port_server = configuracionRepository.findByParametro(configuraciones.get(8).getParametro());
+            if(key.length()==0)
+                updateConfiguracion("KEY_FILE", "0");
+            else
+                updateConfiguracion("KEY_FILE", "1");   
 
-            root_dir.setValor(root);
-            key_dir.setValor(key);
-            iv_dir.setValor(iv);
-            bk_cant.setValor(cant.toString());
-            timeout.setValor(time.toString());
+            if(iv.length()==0)
+                updateConfiguracion("IV_FILE", "0");
+            else
+                updateConfiguracion("IV_FILE", "1");
 
-            configuracionRepository.save(root_dir);
-            configuracionRepository.save(key_dir);
-            configuracionRepository.save(iv_dir);
-            configuracionRepository.save(bk_cant);
-            configuracionRepository.save(timeout);
+            updateConfiguracion("ROOT", root);
+            updateConfiguracion("KEY_RUTA", key);
+            updateConfiguracion("IV_RUTA", iv);
+            updateConfiguracion("BK_FILE", cant.toString());
+            updateConfiguracion("SESSION_TIMEOUT", time.toString());
 
-            if(size!=Integer.parseInt(size_file.getValor()))
+            if(size!=Integer.parseInt(size_db))
             {
-                size_file.setValor(size.toString());
-                configuracionRepository.save(size_file);
+                updateConfiguracion("MAX_FILE_UPLOAD", size.toString());
                 commonsMultipartResolver.setMaxUploadSize(size*1024*1024);
             }
 
-            if(port!=Integer.parseInt(port_server.getValor()))
+            if(port!=Integer.parseInt(port_db))
             {
-                port_server.setValor(port.toString());
-                configuracionRepository.save(port_server);
+                updateConfiguracion("PORT_SERVER", port.toString());
                 tomcatServletWebServerFactory.setPort(port);
             }
 

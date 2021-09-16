@@ -12,6 +12,7 @@ import com.ghb.springboot.cloud.app.entity.Archivo;
 import com.ghb.springboot.cloud.app.service.IConfiguracionService;
 import com.ghb.springboot.cloud.app.service.IDirectorioService;
 import com.ghb.springboot.cloud.app.service.IFileService;
+import com.ghb.springboot.cloud.app.service.IRutaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,13 +37,15 @@ public class DirectorioController implements HandlerExceptionResolver{
     private IDirectorioService directorioService;
     private IFileService fileService;
     private IConfiguracionService configuracionService;
+    private IRutaService rutaService;
 
     @Autowired    
     public DirectorioController(IDirectorioService directorioService,
-    IFileService fileService,IConfiguracionService configuracionService) {
+    IFileService fileService,IConfiguracionService configuracionService,IRutaService rutaService) {
         this.directorioService = directorioService;
         this.fileService = fileService;
         this.configuracionService = configuracionService;
+        this.rutaService = rutaService;
     }
 
     @GetMapping({"/",""})
@@ -54,6 +57,7 @@ public class DirectorioController implements HandlerExceptionResolver{
         model.addAttribute("directorios", directorios);
         model.addAttribute("ruta", "");
         model.addAttribute("rol", authentication.getAuthorities().iterator().next().toString());
+        model.addAttribute("propietario", false);
         
         return "directorio/directorio";
     }
@@ -134,6 +138,8 @@ public class DirectorioController implements HandlerExceptionResolver{
                 model.addAttribute("ruta", dir.replaceAll("\\+", "/"));
                 model.addAttribute("rol", authentication.getAuthorities().iterator().next().toString());
                 model.addAttribute("rutaAnterior",directorioService.rutaAnterior(dir));
+                model.addAttribute("propietario",rutaService.soyPropietario(
+                    "/"+dir.replaceAll("\\+", "/"), authentication.getName()));
                 return "directorio/directorio";
             }
             else
