@@ -84,13 +84,13 @@ public class RutaServiceImpl implements IRutaService{
     public String eliminarMiembroRuta(String username, String dir) {
         Usuario usuario=usuarioRepository.findByUsername(username);
         Ruta ruta=rutaRepository.findByNombre(dir);
-        String separador= System.getProperty("os.name").contains("Windows")?"\\":"/";
+        //String separador= System.getProperty("os.name").contains("Windows")?"\\":"/";
 
         ruta.borrarPropietario(usuario);
         ruta.borrarMiembro(usuario);
         rutaRepository.save(ruta);
 
-        rutaRepository.findByNombreStartsWith(ruta.getNombre()+separador).forEach(r->
+        rutaRepository.findByNombreStartsWith(ruta.getNombre()+"/").forEach(r->
         {
             r.borrarPropietario(usuario);
             r.borrarMiembro(usuario);
@@ -115,7 +115,7 @@ public class RutaServiceImpl implements IRutaService{
                 .forEach(File::delete);
                 
             rutaRepository.delete(rutaRepository.findByNombre(dir));
-            rutaRepository.findByNombreStartsWith(dir+separador).forEach(r->rutaRepository.delete(r));
+            rutaRepository.findByNombreStartsWith(dir+"/").forEach(r->rutaRepository.delete(r));
 
             return "Se ha eliminado la ruta "+dir;
         } catch (IOException e) {
