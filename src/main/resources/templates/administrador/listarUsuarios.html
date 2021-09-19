@@ -35,8 +35,13 @@
                                 <td th:text="${usuario.apellidoMat}"></td>
                                 <td th:text="${usuario.username}"></td>
                                 <td th:text="${#strings.substring(usuario.rol,5)}"></td>
-                                <td th:text="${usuario.enabled}"></td>
-                                <td th:text="${usuario.fechaCreacion}"></td>
+                                <td th:if="${usuario.enabled==true}" class="td_col" style="font-size: large; color: green;">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                </td>
+                                <td th:if="${usuario.enabled!=true}" class="td_col" style="font-size: large; color: red;">
+                                    <i class="bi bi-x-circle-fill"></i>
+                                </td>
+                                <td th:text="${usuario.fechaFormato}"></td>
                             </tr>
                         </tbody>
                     </table>

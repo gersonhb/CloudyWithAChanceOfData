@@ -18,9 +18,13 @@
             <td class="col-2 th_col" th:text="${a.formatoFecha}"></td>
             <td class="col-2 th_col">
                 <a th:href="@{/directorio/descarga/}+${#strings.replace(ruta,'/','+')}+'='+${a.nombre}"
-                    class="col-1 btn btn-primary btn-sm" download th:if="${ruta!=''}">V</a>
+                    class="col-1 btn btn-primary btn-sm" download th:if="${ruta!=''}">
+                    <i class="bi bi-arrow-down-circle"></i>
+                </a>
                 <a th:href="@{/directorio/descarga/}+${a.nombre}" class="col-1 btn btn-primary btn-sm" download
-                    th:if="${ruta==''}">V</a>
+                    th:if="${ruta==''}">
+                    <i class="bi bi-arrow-down-circle"></i>
+                </a>
             </td>
         </tr>
         <tr th:if="${archivos.size()==0}">

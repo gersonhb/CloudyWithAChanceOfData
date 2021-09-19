@@ -18,6 +18,9 @@
                             data-bs-toggle="modal" data-bs-target="#mkdirModal"
                             th:if="${rol=='ROLE_ADMINISTRADOR' and ruta==''}">
                         <input type="button" value="Crear carpeta" class="mb-3 btn btn-success border"
+                            data-bs-toggle="modal" data-bs-target="#mkdirModal"
+                            th:if="${rol=='ROLE_ADMINISTRADOR' and ruta!=''}">
+                        <input type="button" value="Crear carpeta" class="mb-3 btn btn-success border"
                             data-bs-toggle="modal" data-bs-target="#mkdirModal" 
                             th:if="${rol!='ROLE_ADMINISTRADOR' and ruta!='' and propietario}">
                     </div>
@@ -55,23 +58,33 @@
                                     <div class="row">
                                         <form method="POST" th:action="@{/directorio/borrar/}">
                                         <button class="col btn btn-success btn-sm info" type="button"
-                                            data-bs-toggle="modal" data-bs-target="#bkArchivoModal">i</button>
+                                            data-bs-toggle="modal" data-bs-target="#bkArchivoModal">
+                                            <i class="bi bi-info-circle"></i>
+                                        </button>
                                         <input type="hidden" class="link"
                                             th:value="'/directorio/bkArchivo/'+${#strings.replace(ruta,'/','+')}+'='+${dir.nombre}"
                                             th:if="${ruta!=''}" />
                                         <input type="hidden" class="link"
                                             th:value="'/directorio/bkArchivo/'+${dir.nombre}" th:if="${ruta==''}" />
                                         <a th:href="@{/directorio/descarga/}+${#strings.replace(ruta,'/','+')}+'='+${dir.nombre}"
-                                            class="col btn btn-primary btn-sm" download th:if="${ruta!=''}">V</a>
+                                            class="col btn btn-primary btn-sm" download th:if="${ruta!=''}">
+                                            <i class="bi bi-arrow-down-circle"></i></a>
                                         <a th:href="@{/directorio/descarga/}+${dir.nombre}"
-                                            class="col btn btn-primary btn-sm" download th:if="${ruta==''}">V</a>
+                                            class="col btn btn-primary btn-sm" download th:if="${ruta==''}">
+                                            <i class="bi bi-arrow-down-circle"></i>
+                                        </a>
+                                            
                                         
                                             <button type="submit" class="btn btn-danger btn-sm"
                                                 th:if="${rol=='ROLE_SUPERVISOR' and propietario}"
-                                                onclick="return confirmarEliminacionArchivo();">X</button>
+                                                onclick="return confirmarEliminacionArchivo();">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
                                             <button type="submit" class="btn btn-danger btn-sm"
                                                 th:if="${rol=='ROLE_ADMINISTRADOR'}"
-                                                onclick="return confirmarEliminacionArchivo();">X</button>
+                                                onclick="return confirmarEliminacionArchivo();">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
                                             <input type="hidden" name="file" th:value="${dir.nombre}">
                                             <input type="hidden" name="ruta" th:value="${ruta}">
                                         </form>

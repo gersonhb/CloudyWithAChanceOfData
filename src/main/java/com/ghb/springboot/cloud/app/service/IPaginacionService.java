@@ -10,6 +10,7 @@ public interface IPaginacionService {
 
     Page<Usuario> getAllUsuarios(Pageable pageable);
     Page<Ruta> getPropietariosRuta(Long idUsuario,Pageable pageable);
+    Page<Ruta> getAllRutas(Pageable pageable);
     Page<Usuario> getPropietariosUsuario(String nomRuta,Pageable pageable);
     Page<Usuario> getMiembrosUsuario(String nomRuta,Pageable pageable);
 }

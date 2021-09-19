@@ -51,7 +51,8 @@ public class SupervisorController {
         int pagina = page!=null? (page-1):0;
 
         PageRequest pageRequest = PageRequest.of(pagina, 10);
-        Page<Ruta> pageRuta= paginacionService.getPropietariosRuta(idUsuario,pageRequest);
+        Page<Ruta> pageRuta= !authentication.getAuthorities().iterator().next().toString().equals("ROLE_ADMINISTRADOR")?
+            paginacionService.getPropietariosRuta(idUsuario,pageRequest):paginacionService.getAllRutas(pageRequest);
 
         int totalPage = pageRuta.getTotalPages();
         if(totalPage>0)

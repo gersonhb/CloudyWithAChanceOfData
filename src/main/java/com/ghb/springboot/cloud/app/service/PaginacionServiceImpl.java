@@ -38,6 +38,11 @@ public class PaginacionServiceImpl implements IPaginacionService{
     public Page<Usuario> getMiembrosUsuario(String nomRuta, Pageable pageable) {
         return usuarioRepository.findMiembrosUsuario(nomRuta, pageable);
     }
+
+    @Override
+    public Page<Ruta> getAllRutas(Pageable pageable) {
+        return rutaRepository.findAll(pageable);
+    }
     
     
 }

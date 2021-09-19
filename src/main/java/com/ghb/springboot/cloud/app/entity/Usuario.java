@@ -2,6 +2,7 @@ package com.ghb.springboot.cloud.app.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -146,6 +147,11 @@ public class Usuario implements Serializable{
         this.miembros = miembros;
     }
 
+    public String fechaFormato()
+    {
+        return this.fechaCreacion.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
     public Usuario() {
     }
 
@@ -199,5 +205,91 @@ public class Usuario implements Serializable{
                 + ", password=" + password + ", propietarios=" + propietarios + ", rol=" + rol + ", username="
                 + username + "]";
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((apellidoMat == null) ? 0 : apellidoMat.hashCode());
+        result = prime * result + ((apellidoPat == null) ? 0 : apellidoPat.hashCode());
+        result = prime * result + ((enabled == null) ? 0 : enabled.hashCode());
+        result = prime * result + ((fechaCreacion == null) ? 0 : fechaCreacion.hashCode());
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((miembros == null) ? 0 : miembros.hashCode());
+        result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
+        result = prime * result + ((password == null) ? 0 : password.hashCode());
+        result = prime * result + ((propietarios == null) ? 0 : propietarios.hashCode());
+        result = prime * result + ((rol == null) ? 0 : rol.hashCode());
+        result = prime * result + ((username == null) ? 0 : username.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Usuario other = (Usuario) obj;
+        if (apellidoMat == null) {
+            if (other.apellidoMat != null)
+                return false;
+        } else if (!apellidoMat.equals(other.apellidoMat))
+            return false;
+        if (apellidoPat == null) {
+            if (other.apellidoPat != null)
+                return false;
+        } else if (!apellidoPat.equals(other.apellidoPat))
+            return false;
+        if (enabled == null) {
+            if (other.enabled != null)
+                return false;
+        } else if (!enabled.equals(other.enabled))
+            return false;
+        if (fechaCreacion == null) {
+            if (other.fechaCreacion != null)
+                return false;
+        } else if (!fechaCreacion.equals(other.fechaCreacion))
+            return false;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (miembros == null) {
+            if (other.miembros != null)
+                return false;
+        } else if (!miembros.equals(other.miembros))
+            return false;
+        if (nombre == null) {
+            if (other.nombre != null)
+                return false;
+        } else if (!nombre.equals(other.nombre))
+            return false;
+        if (password == null) {
+            if (other.password != null)
+                return false;
+        } else if (!password.equals(other.password))
+            return false;
+        if (propietarios == null) {
+            if (other.propietarios != null)
+                return false;
+        } else if (!propietarios.equals(other.propietarios))
+            return false;
+        if (rol == null) {
+            if (other.rol != null)
+                return false;
+        } else if (!rol.equals(other.rol))
+            return false;
+        if (username == null) {
+            if (other.username != null)
+                return false;
+        } else if (!username.equals(other.username))
+            return false;
+        return true;
+    }
+    
 
 }
