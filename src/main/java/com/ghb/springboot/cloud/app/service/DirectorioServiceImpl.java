@@ -50,6 +50,8 @@ public class DirectorioServiceImpl implements IDirectorioService {
         .sorted()
         .filter(n->!(n.getFileName().toString().matches("^.+_\\d\\.[a-zA-Z0-9]+$")))
         .filter(n->!(n.getFileName().toString().matches("^.+_\\d$")))
+        .filter(n->!(n.getFileName().toString().matches("^.+\\.unlock$")))
+        .filter(n->!(n.getFileName().toString().matches("^.+\\.lock$")))
         .map(n->	
            	new Archivo(
             n.toFile().getName(), 

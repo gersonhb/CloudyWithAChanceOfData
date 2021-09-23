@@ -65,16 +65,29 @@ function ValidarCifrado(idBtn, idAlerta) {
 }
 
 function confirmarEliminacionUsuarioRuta() {
-    result=confirm("¿Está seguro de eliminar al usuario?");
+    result = confirm("¿Está seguro de eliminar al usuario?");
     return result;
 }
 
 function confirmarEliminacionRuta() {
-    result=confirm("¿Está seguro de eliminar la ruta? Perderá todos los archivos que contenga.");
+    result = confirm("¿Está seguro de eliminar la ruta? Perderá todos los archivos que contenga.");
     return result;
 }
 
 function confirmarEliminacionArchivo() {
-    result=confirm("¿Está seguro de eliminar el archivo? Perderá todos los backups correspondientes.");
+    result = confirm("¿Está seguro de eliminar el archivo? Perderá todos los backups correspondientes.");
     return result;
+}
+
+function carga() {
+    let carga=document.getElementById('contenedor_carga');
+    carga.style.visibility='visible';
+    carga.style.opacity='100';
+    document.getElementById('uploadForm').submit();
+}
+
+window.onload = function(){
+    let carga=document.getElementById('contenedor_carga');
+    carga.style.visibility='hidden';
+    carga.style.opacity='0';
 }

@@ -93,12 +93,14 @@ public class ConfigController {
         File diskPartition = new File(System.getProperty("user.dir")); 
         String space="";
 
-        if(diskPartition.getFreeSpace()>=1024 && diskPartition.getFreeSpace()<1048576)
-            space=(diskPartition.getFreeSpace()/1024)+" KB";
-        else if(diskPartition.getFreeSpace()>=1048576 && diskPartition.getFreeSpace()<1073741824)
-            space=(diskPartition.getFreeSpace()/1048576)+" MB";
-        else if(diskPartition.getFreeSpace()>=1073741824)
-            space=(diskPartition.getFreeSpace()/1073741824)+" GB";
+        if(diskPartition.getFreeSpace()>=1024L && diskPartition.getFreeSpace()<1048576L)
+            space=(Math.round(((double)diskPartition.getFreeSpace()/1024L))*100.0)/100.0+" KB";
+        else if(diskPartition.getFreeSpace()>=1048576L && diskPartition.getFreeSpace()<1073741824L)
+            space=(Math.round(((double)diskPartition.getFreeSpace()/1048576L))*100.0)/100.0+" MB";
+        else if(diskPartition.getFreeSpace()>=1073741824L && diskPartition.getFreeSpace()<1099511627776L)
+            space=(Math.round(((double)diskPartition.getFreeSpace()/1073741824L))*100.0)/100.0+" GB";
+        else if(diskPartition.getFreeSpace()>=1099511627776L)
+            space=(Math.round(((double)diskPartition.getFreeSpace()/1099511627776L))*100.0)/100.0+" TB";
         else
             space=diskPartition.getFreeSpace()+" B";
 
@@ -111,12 +113,14 @@ public class ConfigController {
         Long size=configuracionService.sizeDirectorio(); 
         String space="";
 
-        if(size>=1024 && size<1048576)
-            space=(size/1024)+" KB";
-        else if(size>=1048576 && size<1073741824)
-            space=(size/1048576)+" MB";
-        else if(size>=1073741824)
-            space=(size/1073741824)+" GB";
+        if(size>=1024L && size<1048576L)
+            space=(Math.round(((double)size/1024L))*100.0)/100.0+" KB";
+        else if(size>=1048576L && size<1073741824L)
+            space=(Math.round(((double)size/1048576L))*100.0)/100.0+" MB";
+        else if(size>=1073741824L && size<1099511627776L)
+            space=(Math.round(((double)size/1073741824L))*100.0)/100.0+" GB";
+        else if(size>=1099511627776L)
+            space=(Math.round(((double)size/1099511627776L))*100.0)/100.0+" TB";
         else
             space=size+" B";
 

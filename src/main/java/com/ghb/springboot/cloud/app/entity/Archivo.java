@@ -46,12 +46,12 @@ public class Archivo {
     {
         String space="";
 
-        if(getTamano()>=1024 && getTamano()<1048576)
-            space=(getTamano()/1024)+" KB";
-        else if(getTamano()>=1048576 && getTamano()<1073741824)
-            space=(getTamano()/1048576)+" MB";
-        else if(getTamano()>=1073741824)
-            space=(getTamano()/1073741824)+" GB";
+        if(getTamano()>=1024L && getTamano()<1048576L)
+            space=(Math.round(((double)getTamano()/1024L))*100.0)/100.0+" KB";
+        else if(getTamano()>=1048576L && getTamano()<1073741824L)
+            space=(Math.round(((double)getTamano()/1048576L))*100.0)/100.0+" MB";
+        else if(getTamano()>=1073741824L)
+            space=(Math.round(((double)getTamano()/1073741824L))*100.0)/100.0+" GB";
         else
             space=getTamano()+" B";
 
