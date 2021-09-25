@@ -28,6 +28,11 @@ public class CustomErrorController implements ErrorController{
             else if(statusCode == HttpStatus.FORBIDDEN.value()) {
                 return "error/error_403";
             }
+            else if(statusCode == HttpStatus.TOO_MANY_REQUESTS.value()) {
+                return "redirect:/directorio";
+            }
+            else
+                return "error/error";
         }
         return "error/error";
     }
