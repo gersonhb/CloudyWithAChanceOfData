@@ -9,7 +9,7 @@
     <div class="container__login">
       <div class="middle">
         <div id="login">
-          <form th:action="@{/login}" method="POST">
+          <form th:action="@{/login}" method="POST" style="margin-top: 15%;">
             <p><input type="text" name="username" id="username" placeholder="Nombre de usuario" autofocus
               style="text-transform:lowercase"></p>
             <p><input type="password" name="password" id="password" placeholder="contraseña"></p>
@@ -20,7 +20,8 @@
             </div>
           </form>
         </div>
-        <div class="logo">LOGO
+        <div class="logo">
+          <img th:src="@{/images/logo.webp}" width="130%" height="130%">
         </div>
       </div>
     </div>
